@@ -6,8 +6,9 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   back,
   logo,
@@ -35,21 +36,35 @@ import {
   subTxt,
 } from '../Utils/constant';
 import {useDispatch} from 'react-redux';
+
+//user-define import
 import {Home, SignUp} from '../Screens';
 import {LOGIN} from '../Redux/Type';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../Components/CustomButton';
 import {loginAction} from '../Redux/Actions/loginAction';
 import {Route} from '../Navigation/Routes';
+import { isValidLength, validateEmail } from '../Validaton';
 
 const Login = () => {
   const navigation = useNavigation();
   const pssRef = useRef();
   const dispatch = useDispatch();
 
-  const onLogin = async () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [seePass, setSeePass] = useState(true);
+  const [error, setError] = useState('');
+  const [passError, setPassError] = useState('');
+
+const onLogin = () => {
+  const isValidEmail = validateEmail(email, setError);
+  const isValidPassword = isValidLength(password, setPassError);
+  if (isValidEmail && isValidPassword) {
     dispatch(loginAction());
-  };
+  }
+}
+
   const register = () => {
     navigation.navigate(Route.SignUP);
   };
@@ -80,18 +95,32 @@ const Login = () => {
                   keyboardType="email-address"
                   style={styles.emailChild}
                   blurOnSubmit={false}
+                  onChangeText={(text) => { setEmail(text); validateEmail(text, setError) }}
                   returnKeyType="next"
                   onSubmitEditing={() => {
                     pssRef.current.focus();
                   }}
                 />
+                <View>
+                  {error ? (
+                    <Text style={styles.errorMessage}>{error}</Text>
+                  ) : null}
+                </View>
                 <TextInput
                   placeholder={pass}
-                  secureTextEntry={true}
+                  secureTextEntry={seePass}
                   ref={pssRef}
+                  onChangeText={(text) => { setPassword(text); isValidLength(text, setPassError) }}
                   style={styles.pass}
                 />
-                <Button icon={Passlogo} iconStyle={styles.fieldIcons} />
+                <Button icon={Passlogo} iconStyle={styles.fieldIcons} 
+                onPress={() => setSeePass(!seePass)}
+                />
+                <View>
+                  {passError ? (
+                    <Text style={styles.errorMessage2}>{passError}</Text>
+                  ) : null}
+                </View>
                 <Button
                   title={forgotPassword}
                   btnStyle={styles.forgotPassword}

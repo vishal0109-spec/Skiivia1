@@ -5,6 +5,17 @@ import {
 } from 'react-native-responsive-screen';
 
 export const styles = StyleSheet.create({
+  errorMessage:{
+    color:'red',
+    marginLeft:wp(5),
+    fontSize:hp(1.8),
+  },
+  errorMessage2:{
+    color:'red',
+    marginLeft:wp(5),
+    fontSize:hp(1.8),
+    marginTop:hp(-2),
+  },
   actInd:{
     justifyContent: 'space-around',
     color: '#000',
