@@ -1,6 +1,9 @@
 package com.project
 
 import android.app.Application
+
+import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage
+
 import com.facebook.react.PackageList
 import com.facebook.react.ReactApplication
 import com.facebook.react.ReactHost

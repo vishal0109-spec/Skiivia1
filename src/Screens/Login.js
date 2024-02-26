@@ -36,6 +36,7 @@ import {
   subTxt,
 } from '../Utils/constant';
 import {useDispatch} from 'react-redux';
+import auth from '@react-native-firebase/auth';
 
 //user-define import
 import {Home, SignUp} from '../Screens';
@@ -44,7 +45,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../Components/CustomButton';
 import {loginAction} from '../Redux/Actions/loginAction';
 import {Route} from '../Navigation/Routes';
-import { isValidLength, validateEmail } from '../Validaton';
+import {isValidLength, validateEmail} from '../Validaton';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -56,14 +57,25 @@ const Login = () => {
   const [seePass, setSeePass] = useState(true);
   const [error, setError] = useState('');
   const [passError, setPassError] = useState('');
-
-const onLogin = () => {
-  const isValidEmail = validateEmail(email, setError);
-  const isValidPassword = isValidLength(password, setPassError);
-  if (isValidEmail && isValidPassword) {
-    dispatch(loginAction());
-  }
-}
+  const [message, setMessage] = useState('');
+  const onLogin = async () => {
+    console.log(email,password);
+    try {
+      const {user} = await auth().signInWithEmailAndPassword(
+        email,
+        password,
+      );
+      console.log('LOGIN USER', user);
+      const userData = {
+        email: user.email,
+        password: user.password,
+      };
+      dispatch(loginAction(userData));
+    } catch (err) {
+      console.log(err.message);
+      setError(err.message);
+    }
+  };
 
   const register = () => {
     navigation.navigate(Route.SignUP);
@@ -95,7 +107,10 @@ const onLogin = () => {
                   keyboardType="email-address"
                   style={styles.emailChild}
                   blurOnSubmit={false}
-                  onChangeText={(text) => { setEmail(text); validateEmail(text, setError) }}
+                  onChangeText={text => {
+                    setEmail(text);
+                    validateEmail(text, setError);
+                  }}
                   returnKeyType="next"
                   onSubmitEditing={() => {
                     pssRef.current.focus();
@@ -110,11 +125,16 @@ const onLogin = () => {
                   placeholder={pass}
                   secureTextEntry={seePass}
                   ref={pssRef}
-                  onChangeText={(text) => { setPassword(text); isValidLength(text, setPassError) }}
+                  onChangeText={text => {
+                    setPassword(text);
+                    isValidLength(text, setPassError);
+                  }}
                   style={styles.pass}
                 />
-                <Button icon={Passlogo} iconStyle={styles.fieldIcons} 
-                onPress={() => setSeePass(!seePass)}
+                <Button
+                  icon={Passlogo}
+                  iconStyle={styles.fieldIcons}
+                  onPress={() => setSeePass(!seePass)}
                 />
                 <View>
                   {passError ? (

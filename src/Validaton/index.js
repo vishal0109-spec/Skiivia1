@@ -6,10 +6,10 @@ export const isValidLength = (input, setPassError) => {
     setPassError('Incorrect Password');
     return false;
   } else if (!/[A-Z]/.test(input) || !/[a-z]/.test(input)) {
-    setPassError('Include both upper and lower case letters');
+    setPassError('Provide Strong Password');
     return false;
   } else if (!/[^A-Za-z0-9]/.test(input)) {
-    setPassError('Include at least one special character');
+    setPassError('Provide Strong Password');
     return false;
   } else {
     setPassError('');
