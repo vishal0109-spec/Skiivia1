@@ -8,3 +8,5 @@ export const Navback = require('../Assests/Images/navback.png');
 export const LoginTxt = require('../Assests/Images/logintxt.png');
 export const Passdot = require('../Assests/Images/passdot.png');
 export const LoginWith = require('../Assests/Images/loginwith.png');
+export const arrow = require('../Assests/Images/arrow.png');
+export const warning = require('../Assests/Images/warning.png');

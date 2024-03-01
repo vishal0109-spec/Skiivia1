@@ -58,22 +58,36 @@ const Login = () => {
   const [error, setError] = useState('');
   const [passError, setPassError] = useState('');
   const [message, setMessage] = useState('');
+  
   const onLogin = async () => {
     console.log(email,password);
+    
     try {
       const {user} = await auth().signInWithEmailAndPassword(
         email,
         password,
       );
       console.log('LOGIN USER', user);
+      if (!user.emailVerified) {
+        alert('Please verify your email before logging in.');
+        return;
+      }
       const userData = {
         email: user.email,
         password: user.password,
       };
       dispatch(loginAction(userData));
-    } catch (err) {
+    }  catch (err) {
       console.log(err.message);
-      setError(err.message);
+      if (err.code === 'auth/user-not-found') {
+        alert('Please register your account.');
+      } else if (err.code === 'auth/wrong-password') {
+        alert('Invalid credentials. Please try again.');
+      } else if (err.code === 'auth/invalid-email') {
+        alert('Please register your account.');
+      } else {
+        setError(err.message);
+      }
     }
   };
 

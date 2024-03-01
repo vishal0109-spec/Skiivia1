@@ -1,7 +1,7 @@
 //loginscreen constant
 export const loginTxt = 'Login';
 export const subTxt = 'It’s time to rock n roll! Let’s get started now.';
-export const email = 'Email Address';
+export const email = 'Email*';
 export const pass = 'Password';
 export const forgotPassword = 'Forgot Password?';
 export const orLogin = 'or login with';
@@ -10,4 +10,19 @@ export const continueWithFacebook = 'Continue with Facebook';
 export const continueWithApple = 'Continue with Apple';
 export const newToTxt = 'New to The Beer Store?';
 export const  createAccountTxt= 'Create an account';
-
+export const registerTxt = 'Register';
+export const compltFormTxt = 'Complete the form below to create your account.';
+export const salutation = 'Salutation*';
+export const firstName = 'First Name*';
+export const lastName = 'Last Name*';
+export const phnNo = 'Phone #*';
+export const pasInstTxt = 'Password must contain a minimum of 8 characters, at least 1 letter, 1 number, and 1 special character (!,@,#,$,%,^,&,*).'
+export const rgstrPasTxt = 'Your Password*';
+export const cnfrmPass = 'Confirm Password*';
+export const dobTxt = 'Date of Birth *';
+export const dayTxt = 'DD';
+export const mnthTxt = 'MM';
+export const yearTxt = 'YY';
+export const cnfrmationTxt = 'Yes! I’d like to receive occasional emails with updates and promotions from The Beer Store. You can withdraw your consent at any time.';
+export const mrTxt = 'Mr.';
+export const mrsTxt = 'Mrs.';
