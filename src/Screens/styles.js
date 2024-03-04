@@ -99,6 +99,9 @@ export const styles = StyleSheet.create({
   frame1: {
     flex: 1,
   },
+  appContainer: {
+    flex: 1,
+  },
   emailChild: {
     width: wp(90),
     backgroundColor: '#F9F9F9',

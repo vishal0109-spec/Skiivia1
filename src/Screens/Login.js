@@ -38,6 +38,7 @@ import {
 import {useDispatch} from 'react-redux';
 import auth from '@react-native-firebase/auth';
 
+
 //user-define import
 import {Home, SignUp} from '../Screens';
 import {LOGIN} from '../Redux/Type';
@@ -94,6 +95,20 @@ const Login = () => {
   const register = () => {
     navigation.navigate(Route.SignUP);
   };
+
+  const forgotPass = () => {
+    if(email.trim() !== ''){
+      auth().sendPasswordResetEmail(email)
+      .then(() => {
+        alert("Password reset email sent")
+      }).catch((error) => {
+        alert(error.message)
+      })
+    }else{
+      alert("Please Enter Registered Email!")
+    }
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.container2}>
@@ -158,7 +173,7 @@ const Login = () => {
                 <Button
                   title={forgotPassword}
                   btnStyle={styles.forgotPassword}
-                  onPress={() => navigation.navigate('ForgotPassword')}
+                  onPress={forgotPass}
                 />
                 <Button
                   style={styles.button}
