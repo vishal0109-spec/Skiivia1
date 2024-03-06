@@ -61,14 +61,11 @@ const Login = () => {
   const [message, setMessage] = useState('');
   
   const onLogin = async () => {
-    console.log(email,password);
-    
     try {
       const {user} = await auth().signInWithEmailAndPassword(
         email,
         password,
       );
-      console.log('LOGIN USER', user);
       if (!user.emailVerified) {
         alert('Please verify your email before logging in.');
         return;

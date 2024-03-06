@@ -11,4 +11,6 @@ export const Route = {
 
     //AppStack Screen
     Home:'Home',
+    Account:'Account',
+    Upload:'Upload',
 };

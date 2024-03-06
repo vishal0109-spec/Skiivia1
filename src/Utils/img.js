@@ -10,3 +10,6 @@ export const Passdot = require('../Assests/Images/passdot.png');
 export const LoginWith = require('../Assests/Images/loginwith.png');
 export const arrow = require('../Assests/Images/arrow.png');
 export const warning = require('../Assests/Images/warning.png');
+export const upload = require('../Assests/Images/upload.png');
+export const account = require('../Assests/Images/account.png');
+export const home = require('../Assests/Images/Home.png');

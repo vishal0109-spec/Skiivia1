@@ -18,7 +18,6 @@ const App = () => {
 
   const getDeviceToken = async() => {
     let token = await messaging().getToken();
-    console.log(token);
   };
 
   useEffect(() => {
