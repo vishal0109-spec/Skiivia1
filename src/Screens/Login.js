@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   back,
   logo,
@@ -37,6 +37,7 @@ import {
 } from '../Utils/constant';
 import {useDispatch} from 'react-redux';
 import auth from '@react-native-firebase/auth';
+import { GoogleSignin, statusCodes} from '@react-native-google-signin/google-signin';
 
 
 //user-define import
@@ -59,6 +60,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [passError, setPassError] = useState('');
   const [message, setMessage] = useState('');
+  const [userInfo,setUserInfo] = useState(null);
   
   const onLogin = async () => {
     try {
@@ -91,6 +93,39 @@ const Login = () => {
 
   const register = () => {
     navigation.navigate(Route.SignUP);
+  };
+
+  useEffect(()=>{
+    GoogleSignin.configure({
+      webClientId: "363579765475-6ehuog9hiaaftrnv7gahhteij2b9eqnh.apps.googleusercontent.com",
+    });
+  },[])
+
+  const googleLogin = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const usrInfo = await GoogleSignin.signIn();
+      setUserInfo({ usrInfo });
+      console.log(usrInfo );
+      const userData = {
+        email: usrInfo.email,
+      };
+      dispatch(loginAction(userData));
+    } catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        console.log(error);
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+        console.log(error);
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        console.log(error);
+      } else {
+        // some other error happened
+        console.log(error);
+      }
+    }
   };
 
   const forgotPass = () => {
@@ -191,6 +226,9 @@ const Login = () => {
                   title={continueWithGoogle}
                   icon={Glogo}
                   iconStyle={styles.logoIconLayout}
+                  onPress={() => {
+                    googleLogin();
+                  }}
                 />
                 <Button
                   style={styles.button3}

@@ -1,26 +1,44 @@
 {
   "project_info": {
-    "project_number": "808529777797",
-    "project_id": "skiivia1",
-    "storage_bucket": "skiivia1.appspot.com"
+    "project_number": "363579765475",
+    "project_id": "skiivia2",
+    "storage_bucket": "skiivia2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:808529777797:android:876dfeeb632058091605ec",
+        "mobilesdk_app_id": "1:363579765475:android:170ed9e6545d02f7d10bd6",
         "android_client_info": {
-          "package_name": "com.project"
+          "package_name": "com.skiiviaProject"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "363579765475-musd44fl9kuvcdu8m22ciq4pfg309ssa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.skiiviaProject",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "363579765475-6ehuog9hiaaftrnv7gahhteij2b9eqnh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDwAUy-aS_GzcgS_WpkWQr9V4xn0UZDqI0"
+          "current_key": "AIzaSyCkB7QmwjU9Toy53qZVZDy2B1hpcJZablo"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "363579765475-6ehuog9hiaaftrnv7gahhteij2b9eqnh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
