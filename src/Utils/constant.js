@@ -25,4 +25,16 @@ export const mnthTxt = 'MM';
 export const yearTxt = 'YY';
 export const cnfrmationTxt = 'Yes! I’d like to receive occasional emails with updates and promotions from The Beer Store. You can withdraw your consent at any time.';
 export const mrTxt = 'Mr.';
+export const profilTxt = "Cameron Rain";
+export const profilTxt2 = "42(Overall Rank) ";
+export const rideTxt = 'Your Rides';
+export const leaderboardTxt = 'Leader Board';
+export const walletTxt = 'Wallet';
+export const settingTxt = 'Settings';
+export const notificationTxt = 'Notifications';
+export const legalTxt = 'Legal';
 export const mrsTxt = 'Mrs.';
+export const hlpTxt = 'Help & Support';
+export const logoutTxt = 'Logout';
+export const dltTxt = 'Delete Account';
+
