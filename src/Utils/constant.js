@@ -37,4 +37,7 @@ export const mrsTxt = 'Mrs.';
 export const hlpTxt = 'Help & Support';
 export const logoutTxt = 'Logout';
 export const dltTxt = 'Delete Account';
+export const uploadTxt = 'Upload Image';
+export const uploadPostTxt = 'Upload Post';
+export const descriptinBoxTxt = "Write your post description here...";
 

@@ -23,3 +23,6 @@ export const leaderboard = require('../Assests/Images/leaderboard.png');
 export const deleteIcon = require('../Assests/Images/deleteIcon.png');
 export const car = require('../Assests/Images/car.png');
 export const letterC = require('../Assests/Images/letterC.png');
+export const home = require('../Assests/Images/Home.png');
+export const drawer = require('../Assests/Images/drawer.png');
+export const camera = require('../Assests/Images/camera.png');

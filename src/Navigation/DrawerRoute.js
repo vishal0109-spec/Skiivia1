@@ -185,9 +185,8 @@ const DrawerRoute = () => {
       screenOptions={{
         headerShown: false,drawerStyle:{backgroundColor:'transparent'}
       }}
-      
       drawerContent={props => <CustomDrawerContent />}>
-      {/* <Drawer.Screen name="TabRoutes" component={TabRoutes} /> */}
+      <Drawer.Screen name="TabRoutes" component={TabRoutes} />
       <Drawer.Screen name="TopTabs" component={TopTabs} />
     </Drawer.Navigator>
   );
