@@ -95,9 +95,9 @@ export const validateRegister = (
     errorMsg.phnNo = 'Phone number should be 10 digits!';
   }
 
-  if (!toggleCheckBox) {
-    errorMsg.toggleCheckBox = 'Consent Required!';
-  }
+  // if (!toggleCheckBox) {
+  //   errorMsg.toggleCheckBox = 'Consent Required!';
+  // }
 
   if (!dayValue || !mnthValue || !yearValue) {
     errorMsg.dob = 'DOB is required!';

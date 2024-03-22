@@ -40,6 +40,7 @@ import {isValidLength, validateEmail, validateRegister} from '../Validaton';
 import {useNavigation} from '@react-navigation/native';
 import {Route} from '../Navigation/Routes';
 import LoaderScreen from './LoaderScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUp = () => {
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
@@ -117,6 +118,8 @@ const SignUp = () => {
           dob,
         };
         await firestore().collection('users').doc(user.uid).set(userInfo);
+        await AsyncStorage.setItem("Name",firstName);
+        await AsyncStorage.setItem("Email",email);
         alert('Registered Successfully.');
         setLoading(false);
         navigation.navigate(Route.Login);

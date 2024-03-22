@@ -26,3 +26,7 @@ export const letterC = require('../Assests/Images/letterC.png');
 export const home = require('../Assests/Images/Home.png');
 export const drawer = require('../Assests/Images/drawer.png');
 export const camera = require('../Assests/Images/camera.png');
+export const user = require('../Assests/Images/user.png');
+export const heart = require('../Assests/Images/heart.png');
+export const send = require('../Assests/Images/send.png');
+export const chat = require('../Assests/Images/chat.png');

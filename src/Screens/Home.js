@@ -1,6 +1,5 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {useDispatch} from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import {
   GoogleSignin,
   statusCodes,
@@ -9,33 +8,127 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import firestore from '@react-native-firebase/firestore';
+import moment from 'moment';
 
 //user-define imports
-import {logOutAction} from '../Redux/Actions/logOutAction';
 import Button from '../Components/CustomButton';
-import {logoutTxt} from '../Utils/constant';
-import { drawer } from '../Utils/img';
-import { useNavigation } from '@react-navigation/native';
-import TopTabs from '../Navigation/TopTabNav';
+import {chat, drawer, heart, send, user} from '../Utils/img';
 
 const Home = () => {
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
-  const logOut = async () => {
-    await GoogleSignin.signOut();
-    dispatch(logOutAction());
+  const [postData, setPostData] = useState([]);
+  useEffect(() => {
+    getData();
+  });
+  const getData = () => {
+    let tempData = [];
+    firestore()
+      .collection('posts')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(documentSnapshot => {
+          tempData.push(documentSnapshot.data());
+        });
+        setPostData(tempData);
+      });
+  };
+
+  const getTimeAgo = timestamp => {
+    return moment(timestamp.toDate()).fromNow();
   };
 
   return (
     <View style={{flex: 1}}>
-      <View>
-      <Button icon={drawer} iconStyle={Styles.drawerIcon} onPress={()=> navigation.openDrawer()}/>
+      <View
+        style={{
+          width: wp(100),
+          backgroundColor: '#fff',
+          flexDirection: 'row',
+        }}>
+        <Button
+          icon={drawer}
+          iconStyle={Styles.drawerIcon}
+          onPress={() => navigation.openDrawer()}
+        />
+        <Text style={{fontSize: 18, color: '#000', fontWeight: '600',alignSelf:'center',marginTop:10,marginLeft:10}}>
+          Home
+        </Text>
       </View>
-      <View style={Styles.container}>
-        <Text style={{fontSize: 16}}>Welcome to Home Screen</Text>
-        <Button style={Styles.button} onPress={logOut} title={logoutTxt} />
-        <Button style={Styles.button} onPress={()=> navigation.navigate('TopTabs')} title='Top Tabs' />
-      </View>
+
+      {postData.length > 0 ? (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={postData}
+          renderItem={({item, index}) => {
+            return (
+              <View
+                style={{
+                  width: wp(90),
+                  alignSelf: 'center',
+                  marginTop: 20,
+                  backgroundColor: '#fff',
+                  borderRadius: 20,
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: 10,
+                  }}>
+                  <Image
+                    source={user}
+                    style={Styles.icon}
+                  />
+                  <View
+                    style={{
+                      fontSize: 18,
+                      color: '#000',
+                      marginLeft: 15,
+                    }}>
+                    <Text>{item.name}</Text>
+                    <Text>{getTimeAgo(item.timestamp)}</Text>
+                  </View>
+                </View>
+                <Image
+                  source={{uri: item.image}}
+                  style={{
+                    width: wp(80),
+                    height: hp(50),
+                    alignSelf: 'center',
+                    borderRadius: 10,
+                    marginTop: 10,
+                  }}
+                />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: 10,
+                    marginLeft: 10,
+                  }}>
+                  <Image
+                    source={heart}
+                    style={Styles.icon2}
+                  />
+                  <Image
+                    source={chat}
+                    style={Styles.icon2}
+                  />
+                  <Image
+                    source={send}
+                    style={Styles.icon2}
+                  />
+                </View>
+                <Text style={{margin: 20}}>{item.description}</Text>
+              </View>
+            );
+          }}
+        />
+      ) : (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text>No Post Found</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -46,30 +139,35 @@ const Styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  button: {
-    backgroundColor: '#f3b232',
-    shadowColor: 'gray',
-    height: 30,
-    shadowOpacity: 0.2,
-    shadowColor: '#000000',
-    shadowRadius: 3,
-    elevation: 20,
-    shadowOffset: {
-      width: -2,
-      height: 4,
-    },
-    borderRadius: 10,
-    marginTop: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 100,
-  },
-  drawerIcon:{
-    tintColor:'gray',
+  drawerIcon: {
+    tintColor: 'gray',
     width: wp(10),
     height: hp(5),
-    left:wp(2),
-    top:hp(1),
-    resizeMode:"cover",
+    left: wp(2),
+    top: hp(1),
+    resizeMode: 'cover',
+  },
+  icon:{
+    width: wp(10),
+    height: hp(5),
+    left: wp(2),
+    top: hp(1),
+    resizeMode: 'cover',
+  },
+  icon:{
+    width: wp(10),
+    height: hp(5),
+    left: wp(2),
+    top: hp(0.5),
+    bottom:hp(1),
+    resizeMode: 'cover',
+  },
+  icon2:{
+    width: wp(6),
+    height: hp(3),
+    marginLeft: wp(5),
+    top: hp(1),
+    resizeMode: 'cover',
   }
+
 });

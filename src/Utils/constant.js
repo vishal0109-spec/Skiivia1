@@ -40,4 +40,4 @@ export const dltTxt = 'Delete Account';
 export const uploadTxt = 'Upload Image';
 export const uploadPostTxt = 'Upload Post';
 export const descriptinBoxTxt = "Write your post description here...";
-
+export const descriptionTxt = "Enter Description:";
