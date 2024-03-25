@@ -13,4 +13,5 @@ export const Route = {
     Home:'Home',
     Account:'Account',
     Upload:'Upload',
+    Notification:'Notification',
 };

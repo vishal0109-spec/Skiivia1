@@ -56,8 +56,6 @@ const Upload = () => {
   const getFcmToken = async () => {
     name = await AsyncStorage.getItem('Name');
     email = await AsyncStorage.getItem('Email');
-    // token = await messaging().getToken();
-    // console.log(token);
   };
 
   const handleImageUpload = () => {

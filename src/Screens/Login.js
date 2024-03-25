@@ -111,17 +111,20 @@ const Login = () => {
       await GoogleSignin.hasPlayServices();
       const usrInfo = await GoogleSignin.signIn();
       setUserInfo(usrInfo);
-      const {email, givenName} = usrInfo.user;
+      console.log(usrInfo);
+      const {email, givenName,photo} = usrInfo.user;
 
       const userData = {
         email: email,
         name: givenName,
+        photo:photo,
       };
       dispatch(loginAction(userData));
 
       await firestore().collection('users').doc(email).set({
         email: email,
         name: givenName,
+        photo:photo,
       });
     } catch (error) {
       console.log(error);

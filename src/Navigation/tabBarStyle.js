@@ -14,7 +14,8 @@ export const tabBarstyles = StyleSheet.create({
     flexDirection: 'row',
   },
   profileTxtContainer:{
-   marginLeft:hp(1)
+   marginLeft:wp(4),
+   alignSelf:'center'
   },
   drawerContainer: {
     flex: 1,
@@ -58,6 +59,11 @@ export const tabBarstyles = StyleSheet.create({
     height: hp(6),
     width: wp(12),
   },
+  profileIcon:{
+    height: hp(6),
+    width: wp(12),
+    borderRadius:wp(5),
+  },
   drawerIcon2: {
     height: hp(4),
     width: wp(8),
@@ -84,8 +90,8 @@ export const tabBarstyles = StyleSheet.create({
   drawerIconTxt: {
     color: 'white',
     alignSelf: 'stretch',
-    fontSize: hp(3),
-    fontWeight: '700',
+    fontSize: hp(4),
+    fontWeight: '600',
   },
   profileTxt:{
     color: 'white',

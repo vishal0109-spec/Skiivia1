@@ -21,7 +21,7 @@ const Upcoming = () => {
   const logOut = async() => {
     try {
       await GoogleSignin.signOut();
-      setUserInfo(null); // Remember to remove the user from your app's state as well
+      setUserInfo(null); 
       dispatch(logOutAction())
     } catch (error) {
       console.error(error);

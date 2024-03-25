@@ -5,8 +5,9 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Home} from '../Screens';
 import Upload from '../Screens/Upload';
 import Account from '../Screens/Account';
-import {account, home, upload} from '../Utils/img';
+import {account, bell, home, upload} from '../Utils/img';
 import { tabBarstyles } from './tabBarStyle';
+import Notification from '../Screens/Notification';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -61,6 +62,22 @@ export default function TabRoutes() {
           },
         }}
       />
+      {/* <BottomTab.Screen
+        name="Notification"
+        component={Notification}
+        options={{
+          tabBarIcon: ({focused}) => {
+            return (
+              <Image
+                // style={{
+                //   tintColor: focused ? '#F3B232' : '#FFFFFF',
+                // }}
+                source={bell}
+              />
+            );
+          },
+        }}
+      /> */}
     </BottomTab.Navigator>
   );
 }

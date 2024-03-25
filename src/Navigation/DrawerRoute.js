@@ -1,12 +1,20 @@
-import {View, Text} from 'react-native';
-import React, {useState} from 'react';
+import {View, Text, Image} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {DrawerContent, createDrawerNavigator} from '@react-navigation/drawer';
-import Upload from '../Screens/Upload';
-import Account from '../Screens/Account';
-import TabRoutes from './TabRoutes';
+import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useDispatch} from 'react-redux';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
+
+//user define
+import Upload from '../Screens/Upload';
+import Account from '../Screens/Account';
+import TabRoutes from './TabRoutes';
 import {Home} from '../Screens';
 import Button from '../Components/CustomButton';
 import {
@@ -17,7 +25,7 @@ import {
   leaderboard,
   legal,
   letterC,
-  logOut,
+  logout,
   notification,
   rightArrow,
   security,
@@ -40,127 +48,153 @@ import {
   settingTxt,
   walletTxt,
 } from '../Utils/constant';
+import {logOutAction} from '../Redux/Actions/logOutAction';
 
 const Drawer = createDrawerNavigator();
 
 function CustomDrawerContent() {
-  const [selectMenu, setSelectMenu] = useState(1);
   const navigation = useNavigation();
-  // const menuPress = num => {
-  //   setSelectMenu(num);
-  //   if (num == 1) {
-  //     navigation.navigate('Home');
-  //   }
-  //   if (num == 2) {
-  //     navigation.navigate('Upload');
-  //   }
-  //   if (num == 3) {
-  //     navigation.navigate('Account');
-  //   }
-  // };
+  const dispatch = useDispatch();
+
+  const [postData, setPostData] = useState([]);
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '363579765475-6ehuog9hiaaftrnv7gahhteij2b9eqnh.apps.googleusercontent.com',
+    });
+  }, []);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const querySnapshot = await firestore().collection('users').get();
+        const userDataArray = querySnapshot.docs.map(doc => doc.data());
+        if (userDataArray.length > 0) {
+          setPostData(userDataArray[0]);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const logOut = async () => {
+    try {
+      await GoogleSignin.signOut();
+      dispatch(logOutAction());
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <View style={tabBarstyles.drawerContainer}>
-      <View style={tabBarstyles.drawerContainer}>
-        <View style={tabBarstyles.profileContainer}>
-          <View style={tabBarstyles.buttonContainer}>
+        <View style={tabBarstyles.drawerContainer}>
+          <View style={tabBarstyles.profileContainer}>
+            <View style={tabBarstyles.buttonContainer}>
             <View style={tabBarstyles.drawerIconOpacity}>
+            {postData && postData.photo ? (
+              <Image source={{ uri: postData.photo }} style={tabBarstyles.profileIcon} />
+            ) : (
               <Button
                 style={tabBarstyles.drawerIconOpacity}
                 icon={letterC}
                 iconStyle={tabBarstyles.drawerIcon}
               />
-              <View style={tabBarstyles.profileTxtContainer}>
-                <Text style={tabBarstyles.drawerIconTxt}>{profilTxt}</Text>
-                <Text style={tabBarstyles.profileTxt}>{profilTxt2}</Text>
+            )}
+            <View style={tabBarstyles.profileTxtContainer}>
+              <Text style={tabBarstyles.drawerIconTxt}>{postData ? postData.name : 'User'}</Text>
+            </View>
+              </View>
+
+              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon} />
+            </View>
+          </View>
+          <View style={tabBarstyles.profileContainer2}>
+            <View style={tabBarstyles.buttonContainer3}>
+              <View style={tabBarstyles.buttonContainer2}>
+                <Button
+                  style={tabBarstyles.drawerIconOpacity}
+                  title={rideTxt}
+                  icon={car}
+                  iconStyle={tabBarstyles.drawerIcon2}
+                  btnStyle={tabBarstyles.drawerIconTxt2}
+                />
+                <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+              </View>
+              <View style={tabBarstyles.buttonContainer2}>
+                <Button
+                  style={tabBarstyles.drawerIconOpacity}
+                  title={leaderboardTxt}
+                  icon={leaderboard}
+                  iconStyle={tabBarstyles.drawerIcon2}
+                  btnStyle={tabBarstyles.drawerIconTxt2}
+                />
+                <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+              </View>
+              <View style={tabBarstyles.buttonContainer2}>
+                <Button
+                  style={tabBarstyles.drawerIconOpacity}
+                  title={walletTxt}
+                  icon={wallet}
+                  iconStyle={tabBarstyles.drawerIcon2}
+                  btnStyle={tabBarstyles.drawerIconTxt2}
+                />
+                <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+              </View>
+              <View style={tabBarstyles.buttonContainer2}>
+                <Button
+                  style={tabBarstyles.drawerIconOpacity}
+                  title={settingTxt}
+                  icon={setting}
+                  iconStyle={tabBarstyles.drawerIcon2}
+                  btnStyle={tabBarstyles.drawerIconTxt2}
+                />
+                <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+              </View>
+              <View style={tabBarstyles.buttonContainer2}>
+                <Button
+                  style={tabBarstyles.drawerIconOpacity}
+                  title={notificationTxt}
+                  icon={notification}
+                  iconStyle={tabBarstyles.drawerIcon2}
+                  btnStyle={tabBarstyles.drawerIconTxt2}
+                />
+                <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+              </View>
+              <View style={tabBarstyles.buttonContainer2}>
+                <Button
+                  style={tabBarstyles.drawerIconOpacity}
+                  title={legalTxt}
+                  icon={legal}
+                  iconStyle={tabBarstyles.drawerIcon2}
+                  btnStyle={tabBarstyles.drawerIconTxt2}
+                />
+                <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+              </View>
+              <View style={tabBarstyles.buttonContainer2}>
+                <Button
+                  style={tabBarstyles.drawerIconOpacity}
+                  title={hlpTxt}
+                  icon={security}
+                  iconStyle={tabBarstyles.drawerIcon2}
+                  btnStyle={tabBarstyles.drawerIconTxt2}
+                />
+                <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
               </View>
             </View>
-
-            <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon} />
           </View>
         </View>
-        <View style={tabBarstyles.profileContainer2}>
-          <View style={tabBarstyles.buttonContainer3}>
-            <View style={tabBarstyles.buttonContainer2}>
-              <Button
-                style={tabBarstyles.drawerIconOpacity}
-                title={rideTxt}
-                icon={car}
-                iconStyle={tabBarstyles.drawerIcon2}
-                btnStyle={tabBarstyles.drawerIconTxt2}
-              />
-              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
-            </View>
-            <View style={tabBarstyles.buttonContainer2}>
-              <Button
-                style={tabBarstyles.drawerIconOpacity}
-                title={leaderboardTxt}
-                icon={leaderboard}
-                iconStyle={tabBarstyles.drawerIcon2}
-                btnStyle={tabBarstyles.drawerIconTxt2}
-              />
-              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
-            </View>
-            <View style={tabBarstyles.buttonContainer2}>
-              <Button
-                style={tabBarstyles.drawerIconOpacity}
-                title={walletTxt}
-                icon={wallet}
-                iconStyle={tabBarstyles.drawerIcon2}
-                btnStyle={tabBarstyles.drawerIconTxt2}
-              />
-              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
-            </View>
-            <View style={tabBarstyles.buttonContainer2}>
-              <Button
-                style={tabBarstyles.drawerIconOpacity}
-                title={settingTxt}
-                icon={setting}
-                iconStyle={tabBarstyles.drawerIcon2}
-                btnStyle={tabBarstyles.drawerIconTxt2}
-              />
-              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
-            </View>
-            <View style={tabBarstyles.buttonContainer2}>
-              <Button
-                style={tabBarstyles.drawerIconOpacity}
-                title={notificationTxt}
-                icon={notification}
-                iconStyle={tabBarstyles.drawerIcon2}
-                btnStyle={tabBarstyles.drawerIconTxt2}
-              />
-              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
-            </View>
-            <View style={tabBarstyles.buttonContainer2}>
-              <Button
-                style={tabBarstyles.drawerIconOpacity}
-                title={legalTxt}
-                icon={legal}
-                iconStyle={tabBarstyles.drawerIcon2}
-                btnStyle={tabBarstyles.drawerIconTxt2}
-              />
-              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
-            </View>
-            <View style={tabBarstyles.buttonContainer2}>
-              <Button
-                style={tabBarstyles.drawerIconOpacity}
-                title={hlpTxt}
-                icon={security}
-                iconStyle={tabBarstyles.drawerIcon2}
-                btnStyle={tabBarstyles.drawerIconTxt2}
-              />
-              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
-            </View>
-          </View>
-        </View>
-      </View>
-
       <View style={tabBarstyles.buttonContainer4}>
         <View style={tabBarstyles.buttonContainer5}>
           <Button
             style={tabBarstyles.drawerIconOpacity}
             title={logoutTxt}
-            icon={logOut}
+            icon={logout}
+            onPress={logOut}
             iconStyle={tabBarstyles.drawerIcon2}
             btnStyle={tabBarstyles.drawerIconTxt2}
           />
@@ -183,7 +217,8 @@ const DrawerRoute = () => {
   return (
     <Drawer.Navigator
       screenOptions={{
-        headerShown: false,drawerStyle:{backgroundColor:'transparent'}
+        headerShown: false,
+        drawerStyle: {backgroundColor: 'transparent'},
       }}
       drawerContent={props => <CustomDrawerContent />}>
       <Drawer.Screen name="TabRoutes" component={TabRoutes} />

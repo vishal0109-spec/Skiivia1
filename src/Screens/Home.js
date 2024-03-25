@@ -14,8 +14,10 @@ import moment from 'moment';
 //user-define imports
 import Button from '../Components/CustomButton';
 import {chat, drawer, heart, send, user} from '../Utils/img';
+import { useNavigation } from '@react-navigation/native';
 
 const Home = () => {
+  const navigation = useNavigation();
   const [postData, setPostData] = useState([]);
   useEffect(() => {
     getData();
