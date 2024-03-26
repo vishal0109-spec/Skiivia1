@@ -92,102 +92,106 @@ function CustomDrawerContent() {
 
   return (
     <View style={tabBarstyles.drawerContainer}>
-        <View style={tabBarstyles.drawerContainer}>
-          <View style={tabBarstyles.profileContainer}>
-            <View style={tabBarstyles.buttonContainer}>
+      <View style={tabBarstyles.drawerContainer}>
+        <View style={tabBarstyles.profileContainer}>
+          <View style={tabBarstyles.buttonContainer}>
             <View style={tabBarstyles.drawerIconOpacity}>
-            {postData && postData.photo ? (
-              <Image source={{ uri: postData.photo }} style={tabBarstyles.profileIcon} />
-            ) : (
+              {postData && postData.photo ? (
+                <Image
+                  source={{uri: postData.photo}}
+                  style={tabBarstyles.profileIcon}
+                />
+              ) : (
+                <Button
+                  style={tabBarstyles.drawerIconOpacity}
+                  icon={letterC}
+                  iconStyle={tabBarstyles.drawerIcon}
+                />
+              )}
+              <View style={tabBarstyles.profileTxtContainer}>
+                <Text style={tabBarstyles.drawerIconTxt}>
+                  {postData ? postData.name : 'User'}
+                </Text>
+              </View>
+            </View>
+            <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon} />
+          </View>
+        </View>
+        <View style={tabBarstyles.profileContainer2}>
+          <View style={tabBarstyles.buttonContainer3}>
+            <View style={tabBarstyles.buttonContainer2}>
               <Button
                 style={tabBarstyles.drawerIconOpacity}
-                icon={letterC}
-                iconStyle={tabBarstyles.drawerIcon}
+                title={rideTxt}
+                icon={car}
+                iconStyle={tabBarstyles.drawerIcon2}
+                btnStyle={tabBarstyles.drawerIconTxt2}
               />
-            )}
-            <View style={tabBarstyles.profileTxtContainer}>
-              <Text style={tabBarstyles.drawerIconTxt}>{postData ? postData.name : 'User'}</Text>
+              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
             </View>
-              </View>
-
-              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon} />
+            <View style={tabBarstyles.buttonContainer2}>
+              <Button
+                style={tabBarstyles.drawerIconOpacity}
+                title={leaderboardTxt}
+                icon={leaderboard}
+                iconStyle={tabBarstyles.drawerIcon2}
+                btnStyle={tabBarstyles.drawerIconTxt2}
+              />
+              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
             </View>
-          </View>
-          <View style={tabBarstyles.profileContainer2}>
-            <View style={tabBarstyles.buttonContainer3}>
-              <View style={tabBarstyles.buttonContainer2}>
-                <Button
-                  style={tabBarstyles.drawerIconOpacity}
-                  title={rideTxt}
-                  icon={car}
-                  iconStyle={tabBarstyles.drawerIcon2}
-                  btnStyle={tabBarstyles.drawerIconTxt2}
-                />
-                <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
-              </View>
-              <View style={tabBarstyles.buttonContainer2}>
-                <Button
-                  style={tabBarstyles.drawerIconOpacity}
-                  title={leaderboardTxt}
-                  icon={leaderboard}
-                  iconStyle={tabBarstyles.drawerIcon2}
-                  btnStyle={tabBarstyles.drawerIconTxt2}
-                />
-                <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
-              </View>
-              <View style={tabBarstyles.buttonContainer2}>
-                <Button
-                  style={tabBarstyles.drawerIconOpacity}
-                  title={walletTxt}
-                  icon={wallet}
-                  iconStyle={tabBarstyles.drawerIcon2}
-                  btnStyle={tabBarstyles.drawerIconTxt2}
-                />
-                <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
-              </View>
-              <View style={tabBarstyles.buttonContainer2}>
-                <Button
-                  style={tabBarstyles.drawerIconOpacity}
-                  title={settingTxt}
-                  icon={setting}
-                  iconStyle={tabBarstyles.drawerIcon2}
-                  btnStyle={tabBarstyles.drawerIconTxt2}
-                />
-                <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
-              </View>
-              <View style={tabBarstyles.buttonContainer2}>
-                <Button
-                  style={tabBarstyles.drawerIconOpacity}
-                  title={notificationTxt}
-                  icon={notification}
-                  iconStyle={tabBarstyles.drawerIcon2}
-                  btnStyle={tabBarstyles.drawerIconTxt2}
-                />
-                <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
-              </View>
-              <View style={tabBarstyles.buttonContainer2}>
-                <Button
-                  style={tabBarstyles.drawerIconOpacity}
-                  title={legalTxt}
-                  icon={legal}
-                  iconStyle={tabBarstyles.drawerIcon2}
-                  btnStyle={tabBarstyles.drawerIconTxt2}
-                />
-                <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
-              </View>
-              <View style={tabBarstyles.buttonContainer2}>
-                <Button
-                  style={tabBarstyles.drawerIconOpacity}
-                  title={hlpTxt}
-                  icon={security}
-                  iconStyle={tabBarstyles.drawerIcon2}
-                  btnStyle={tabBarstyles.drawerIconTxt2}
-                />
-                <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
-              </View>
+            <View style={tabBarstyles.buttonContainer2}>
+              <Button
+                style={tabBarstyles.drawerIconOpacity}
+                title={walletTxt}
+                icon={wallet}
+                iconStyle={tabBarstyles.drawerIcon2}
+                btnStyle={tabBarstyles.drawerIconTxt2}
+              />
+              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+            </View>
+            <View style={tabBarstyles.buttonContainer2}>
+              <Button
+                style={tabBarstyles.drawerIconOpacity}
+                title={settingTxt}
+                icon={setting}
+                iconStyle={tabBarstyles.drawerIcon2}
+                btnStyle={tabBarstyles.drawerIconTxt2}
+              />
+              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+            </View>
+            <View style={tabBarstyles.buttonContainer2}>
+              <Button
+                style={tabBarstyles.drawerIconOpacity}
+                title={notificationTxt}
+                icon={notification}
+                iconStyle={tabBarstyles.drawerIcon2}
+                btnStyle={tabBarstyles.drawerIconTxt2}
+              />
+              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+            </View>
+            <View style={tabBarstyles.buttonContainer2}>
+              <Button
+                style={tabBarstyles.drawerIconOpacity}
+                title={legalTxt}
+                icon={legal}
+                iconStyle={tabBarstyles.drawerIcon2}
+                btnStyle={tabBarstyles.drawerIconTxt2}
+              />
+              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+            </View>
+            <View style={tabBarstyles.buttonContainer2}>
+              <Button
+                style={tabBarstyles.drawerIconOpacity}
+                title={hlpTxt}
+                icon={security}
+                iconStyle={tabBarstyles.drawerIcon2}
+                btnStyle={tabBarstyles.drawerIconTxt2}
+              />
+              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
             </View>
           </View>
         </View>
+      </View>
       <View style={tabBarstyles.buttonContainer4}>
         <View style={tabBarstyles.buttonContainer5}>
           <Button

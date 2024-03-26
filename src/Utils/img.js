@@ -31,3 +31,6 @@ export const heart = require('../Assests/Images/heart.png');
 export const send = require('../Assests/Images/send.png');
 export const chat = require('../Assests/Images/chat.png');
 export const bell = require('../Assests/Images/bell.png');
+export const profileBack = require('../Assests/Images/profileBack.jpg');
+export const userProfile = require('../Assests/Images/userProfile.png');
+export const pencil = require('../Assests/Images/pencil.png');

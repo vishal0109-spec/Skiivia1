@@ -6,14 +6,20 @@ import {Home} from '../Screens';
 import Upload from '../Screens/Upload';
 import Account from '../Screens/Account';
 import {account, bell, home, upload} from '../Utils/img';
-import { tabBarstyles } from './tabBarStyle';
+import {tabBarstyles} from './tabBarStyle';
 import Notification from '../Screens/Notification';
 
 const BottomTab = createBottomTabNavigator();
 
 export default function TabRoutes() {
   return (
-    <BottomTab.Navigator screenOptions={{headerShown: false, tabBarActiveTintColor:'#F3B232',tabBarInactiveTintColor:'#FFFFFF',tabBarStyle:tabBarstyles.tabBar}}>
+    <BottomTab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: '#F3B232',
+        tabBarInactiveTintColor: '#FFFFFF',
+        tabBarStyle: tabBarstyles.tabBar,
+      }}>
       <BottomTab.Screen
         name="Home"
         component={Home}
@@ -62,22 +68,23 @@ export default function TabRoutes() {
           },
         }}
       />
-      {/* <BottomTab.Screen
+      <BottomTab.Screen
         name="Notification"
         component={Notification}
         options={{
           tabBarIcon: ({focused}) => {
             return (
               <Image
-                // style={{
-                //   tintColor: focused ? '#F3B232' : '#FFFFFF',
-                // }}
+                style={[tabBarstyles.imageIcon,{
+                  tintColor: focused ? '#F3B232' : '#FFFFFF',
+                }
+              ]}
                 source={bell}
               />
             );
           },
         }}
-      /> */}
+      />
     </BottomTab.Navigator>
   );
 }

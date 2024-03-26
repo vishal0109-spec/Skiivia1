@@ -1,10 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import React from 'react';
 import {
-  GoogleSignin,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
-import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
@@ -13,6 +9,8 @@ import {
 import Button from '../Components/CustomButton';
 import { drawer } from '../Utils/img';
 import { useNavigation } from '@react-navigation/native';
+import TopTabs from '../Navigation/TopTabNav';
+
 
 const Notification = () => {
   const navigation = useNavigation();
@@ -24,6 +22,7 @@ const Notification = () => {
       </View>
       <View style={Styles.container}>
         <Text style={{fontSize: 16}}>Welcome to Notification Screen</Text>
+        <Button style={Styles.button} onPress={()=> navigation.navigate('TopTabs')} title='Top Tabs' />
       </View>
     </View>
   );
@@ -44,5 +43,23 @@ const Styles = StyleSheet.create({
     left:wp(2),
     top:hp(1),
     resizeMode:"cover",
-  }
+  },
+  button: {
+    backgroundColor: '#f3b232',
+    shadowColor: 'gray',
+    height: 30,
+    shadowOpacity: 0.2,
+    shadowColor: '#000000',
+    shadowRadius: 3,
+    elevation: 20,
+    shadowOffset: {
+      width: -2,
+      height: 4,
+    },
+    borderRadius: 10,
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 100,
+  },
 });

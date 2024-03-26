@@ -109,16 +109,16 @@ const SignUp = () => {
         const user = userCredential.user;
         await user.sendEmailVerification();
         const dob = `${dayValue}/${mnthValue}/${yearValue}`;
+        const name = `${firstName}${lastName}`;
         const userInfo = {
           selectedSalutation,
-          firstName,
-          lastName,
+          name,
           email,
           phnNo,
           dob,
         };
         await firestore().collection('users').doc(user.uid).set(userInfo);
-        await AsyncStorage.setItem("Name",firstName);
+        await AsyncStorage.setItem("Name",name);
         await AsyncStorage.setItem("Email",email);
         alert('Registered Successfully.');
         setLoading(false);
