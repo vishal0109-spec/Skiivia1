@@ -153,13 +153,6 @@ const Styles = StyleSheet.create({
     width: wp(10),
     height: hp(5),
     left: wp(2),
-    top: hp(1),
-    resizeMode: 'cover',
-  },
-  icon:{
-    width: wp(10),
-    height: hp(5),
-    left: wp(2),
     top: hp(0.5),
     bottom:hp(1),
     resizeMode: 'cover',

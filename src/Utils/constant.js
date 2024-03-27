@@ -42,3 +42,7 @@ export const uploadPostTxt = 'Upload Post';
 export const descriptinBoxTxt = "Write your post description here...";
 export const descriptionTxt = "Enter Description:";
 export const editProfile = "Edit Profile";
+export const galleryTxt = "Upload Photo from Gallery";
+export const deviceTxt = "Upload Photo from Device";
+export const pop1Txt = "Upload Profile photo";
+export const pop2Txt = "Upload Cover photo";

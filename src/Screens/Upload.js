@@ -37,7 +37,6 @@ const Upload = () => {
   const [error, setError] = useState('');
   const [uploadDisabled, setUploadDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
     const wordCount = description.trim().length;

@@ -43,9 +43,10 @@ export default function TabRoutes() {
           tabBarIcon: ({focused}) => {
             return (
               <Image
-                style={{
-                  tintColor: focused ? '#F3B232' : '#FFFFFF',
-                }}
+              style={[tabBarstyles.imageIcon,{
+                tintColor: focused ? '#F3B232' : '#FFFFFF',
+              }
+            ]}
                 source={upload}
               />
             );
