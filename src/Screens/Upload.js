@@ -38,6 +38,7 @@ const Upload = () => {
   const [uploadDisabled, setUploadDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
 
+
   useEffect(() => {
     const wordCount = description.trim().length;
     if (wordCount >= 80 || selectedImage) {
