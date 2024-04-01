@@ -14,4 +14,5 @@ export const Route = {
     Account:'Account',
     Upload:'Upload',
     Notification:'Notification',
+    EditProfile:'EditProfile',
 };

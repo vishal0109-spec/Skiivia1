@@ -37,6 +37,7 @@ import {
   pop1Txt,
   pop2Txt,
 } from '../Utils/constant';
+import EditProfile from './EditProfile';
 
 const Account = () => {
   const navigation = useNavigation();
@@ -240,6 +241,7 @@ const Account = () => {
                   icon={pencil}
                   iconStyle={Styles.pencilIcon3}
                   btnStyle={Styles.profileTxt}
+                  onPress={()=> navigation.navigate(EditProfile)}
                 />
               </View>
             </View>
@@ -469,8 +471,9 @@ const Styles = StyleSheet.create({
   },
   drawerIconTxt: {
     fontSize: hp(3.1),
-    fontWeight: '700',
+    // fontWeight: '700',
     alignSelf: 'center',
+    fontFamily:'Roboto-Bold',
   },
   infoTxt: {
     fontSize: hp(2),
