@@ -11,6 +11,7 @@ import { Alert } from 'react-native';
 import { showNotification } from './notifeeDis';
 import SplashScreen from 'react-native-splash-screen';
 
+//new branch
 const App = () => {
 
   useEffect(()=>{
