@@ -113,7 +113,6 @@ const Login = () => {
       setUserInfo(usrInfo);
       console.log(usrInfo);
       const {email, givenName,photo} = usrInfo.user;
-
       const userData = {
         email: email,
         name: givenName,

@@ -9,6 +9,7 @@ import Navigator from './src/Navigation/navigator';
 import { styles } from './src/Screens/styles';
 import { Alert } from 'react-native';
 import { showNotification } from './notifeeDis';
+import SplashScreen from 'react-native-splash-screen';
 
 const App = () => {
 
@@ -21,10 +22,12 @@ const App = () => {
   };
 
   useEffect(() => {
+    setTimeout(()=>{
+      SplashScreen.hide();
+      },500)
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       showNotification(remoteMessage);
     });
-
     return unsubscribe;
   }, []);
 

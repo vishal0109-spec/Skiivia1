@@ -40,7 +40,7 @@ export const validateRegister = (
   password,
   confrmPassword,
   phnNo,
-  toggleCheckBox,
+  isChecked,
   dayValue,
   mnthValue,
   yearValue,
@@ -95,9 +95,9 @@ export const validateRegister = (
     errorMsg.phnNo = 'Phone number should be 10 digits!';
   }
 
-  // if (!toggleCheckBox) {
-  //   errorMsg.toggleCheckBox = 'Consent Required!';
-  // }
+  if (!isChecked) {
+    errorMsg.isChecked = 'Consent Required!';
+  }
 
   if (!dayValue || !mnthValue || !yearValue) {
     errorMsg.dob = 'DOB is required!';

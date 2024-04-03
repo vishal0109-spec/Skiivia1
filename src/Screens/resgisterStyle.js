@@ -100,6 +100,7 @@ export const styles = StyleSheet.create({
     borderStyle: 'solid',
     paddingLeft: wp(3),
     color: '#4B4F54',
+    fontFamily:'Roboto-Light',
   },
   picker:{
     backgroundColor: '#F9F9F9',

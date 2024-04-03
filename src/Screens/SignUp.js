@@ -34,7 +34,9 @@ import {
   yearTxt,
 } from '../Utils/constant';
 
-import CheckBox from '@react-native-community/checkbox';
+// import CheckBox from '@react-native-community/checkbox';
+// import { CheckBox } from '@rneui/themed';
+import CheckBox from 'react-native-check-box';
 import {styles} from './resgisterStyle';
 import {isValidLength, validateEmail, validateRegister} from '../Validaton';
 import {useNavigation} from '@react-navigation/native';
@@ -43,7 +45,7 @@ import LoaderScreen from './LoaderScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUp = () => {
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [selectedSalutation, setSelectedSalutation] = useState(null);
 
@@ -90,7 +92,7 @@ const SignUp = () => {
       password,
       confrmPassword,
       phnNo,
-      toggleCheckBox,
+      isChecked,
       dayValue,
       mnthValue,
       yearValue,
@@ -118,8 +120,8 @@ const SignUp = () => {
           dob,
         };
         await firestore().collection('users').doc(user.uid).set(userInfo);
-        await AsyncStorage.setItem("Name",name);
-        await AsyncStorage.setItem("Email",email);
+        await AsyncStorage.setItem('Name', name);
+        await AsyncStorage.setItem('Email', email);
         alert('Registered Successfully.');
         setLoading(false);
         navigation.navigate(Route.Login);
@@ -372,15 +374,18 @@ const SignUp = () => {
                   <View>
                     <View style={styles.txtContainer}>
                       <CheckBox
-                        disabled={false}
-                        value={toggleCheckBox}
-                        onValueChange={newValue => setToggleCheckBox(newValue)}
+                        style={{flex: 1}}
+                        onClick={() => setIsChecked(!isChecked)}
+                        isChecked={isChecked}
+                        rightText={cnfrmationTxt}
+                        rightTextStyle={styles.cnfrmTxt}
+                        checkedCheckBoxColor='#039be5'
+                        uncheckedCheckBoxColor ='red'
                       />
-                      <Text style={styles.cnfrmTxt}>{cnfrmationTxt}</Text>
                     </View>
-                    {errorMsg.toggleCheckBox ? (
+                    {errorMsg.isChecked ? (
                       <Text style={styles.errorMessage}>
-                        {errorMsg.toggleCheckBox}
+                        {errorMsg.isChecked}
                       </Text>
                     ) : null}
                   </View>
