@@ -53,6 +53,7 @@ import {loginAction} from '../Redux/Actions/loginAction';
 import {Route} from '../Navigation/Routes';
 import {isValidLength, validateEmail} from '../Validaton';
 import LoaderScreen from './LoaderScreen';
+import axios from 'axios';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -69,29 +70,48 @@ const Login = () => {
   const [userInfo, setUserInfo] = useState(null);
 
   const onLogin = async () => {
-    try {
-      const {user} = await auth().signInWithEmailAndPassword(email, password);
-      if (!user.emailVerified) {
-        alert('Please verify your email before logging in.');
-        return;
-      }
-      const userData = {
-        email: user.email,
-        password: user.password,
-      };
-      dispatch(loginAction(userData));
-    } catch (err) {
-      console.log(err.message);
-      if (err.code === 'auth/user-not-found') {
-        alert('Please register your account.');
-      } else if (err.code === 'auth/wrong-password') {
-        alert('Invalid credentials. Please try again.');
-      } else if (err.code === 'auth/invalid-email') {
-        alert('Please register your account.');
-      } else {
-        setError(err.message);
-      }
-    }
+    // try {
+    //   const {user} = await auth().signInWithEmailAndPassword(email, password);
+    //   if (!user.emailVerified) {
+    //     alert('Please verify your email before logging in.');
+    //     return;
+    //   }
+    //   const userData = {
+    //     email: user.email,
+    //     password: user.password,
+    //   };
+    //   dispatch(loginAction(userData));
+    // } catch (err) {
+    //   console.log(err.message);
+    //   if (err.code === 'auth/user-not-found') {
+    //     alert('Please register your account.');
+    //   } else if (err.code === 'auth/wrong-password') {
+    //     alert('Invalid credentials. Please try again.');
+    //   } else if (err.code === 'auth/invalid-email') {
+    //     alert('Please register your account.');
+    //   } else {
+    //     setError(err.message);
+    //   }
+    // }
+    const url =
+      'https://pba1-292270-ruby.b292270.dev.eastus.az.svc.builder.cafe/login/login';
+    const data = {
+      data: {
+        type: 'email_account',
+        attributes: {
+          email: email,
+          password: password,
+        },
+      },
+    };
+    console.log(data);
+    axios
+      .post(url, data)
+      .then(res => {
+        console.log(res);
+        dispatch(loginAction(data));
+      })
+      .catch(err => console.log(err));
   };
 
   const register = () => {
@@ -112,18 +132,18 @@ const Login = () => {
       const usrInfo = await GoogleSignin.signIn();
       setUserInfo(usrInfo);
       console.log(usrInfo);
-      const {email, givenName,photo} = usrInfo.user;
+      const {email, givenName, photo} = usrInfo.user;
       const userData = {
         email: email,
         name: givenName,
-        photo:photo,
+        photo: photo,
       };
       dispatch(loginAction(userData));
 
       await firestore().collection('users').doc(email).set({
         email: email,
         name: givenName,
-        photo:photo,
+        photo: photo,
       });
     } catch (error) {
       console.log(error);
