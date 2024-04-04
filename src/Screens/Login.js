@@ -54,6 +54,7 @@ import {Route} from '../Navigation/Routes';
 import {isValidLength, validateEmail} from '../Validaton';
 import LoaderScreen from './LoaderScreen';
 import axios from 'axios';
+import {loginRequest} from '../Services/api';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -93,23 +94,10 @@ const Login = () => {
     //     setError(err.message);
     //   }
     // }
-    const url =
-      'https://pba1-292270-ruby.b292270.dev.eastus.az.svc.builder.cafe/login/login';
-    const data = {
-      data: {
-        type: 'email_account',
-        attributes: {
-          email: email,
-          password: password,
-        },
-      },
-    };
-    console.log(data);
-    axios
-      .post(url, data)
+
+    await loginRequest(email, password)
       .then(res => {
-        console.log(res);
-        dispatch(loginAction(data));
+        dispatch(loginAction(res.data));
       })
       .catch(err => console.log(err));
   };

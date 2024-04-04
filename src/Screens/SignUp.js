@@ -41,6 +41,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Route} from '../Navigation/Routes';
 import LoaderScreen from './LoaderScreen';
 import axios from 'axios';
+import { signUpRequest } from '../Services/api';
 
 const SignUp = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -101,63 +102,19 @@ const SignUp = () => {
 
     if (Object.keys(validationErrors).length === 0) {
       setLoading(true);
-      // try {
-      //   const userCredential = await auth().createUserWithEmailAndPassword(
-      //     email,
-      //     password,
-      //   );
-      //   const user = userCredential.user;
-      //   await user.sendEmailVerification();
-      //   const dob = `${dayValue}/${mnthValue}/${yearValue}`;
-      //   const name = `${firstName}${lastName}`;
-      //   const userInfo = {
-      //     selectedSalutation,
-      //     name,
-      //     email,
-      //     phnNo,
-      //     dob,
-      //   };
-      //   await firestore().collection('users').doc(user.uid).set(userInfo);
-      //   await AsyncStorage.setItem('Name', name);
-      //   await AsyncStorage.setItem('Email', email);
-      //   alert('Registered Successfully.');
-      //   setLoading(false);
-      //   navigation.navigate(Route.Login);
-      // } catch (error) {
-      //   if (error.code === 'auth/email-already-in-use') {
-      //     alert('You are already registered. Please proceed to login.');
-      //   } else {
-      //     console.error('Sign up error:', error.message);
-      //   }
-      //   setLoading(false);
-      // }
       const dob = `${dayValue}/${mnthValue}/${yearValue}`;
       const name = `${firstName}${lastName}`;
       await AsyncStorage.setItem('Name', name);
       await AsyncStorage.setItem('Email', email);
 
-     const url =
-        'https://pba1-292270-ruby.b292270.dev.eastus.az.svc.builder.cafe/account/accounts';
-      const data = {
-        "data": {
-          "type": "email_account",
-          "attributes": {
-              "full_name": name,
-              "email":email,
-              "password": password,
-              "full_phone_number": phnNo
-          }
-      }
-      };
-      console.log(data);
-      axios.post(url,data).then((res)=> {
+      await signUpRequest(name, email, password, phnNo).then(res => {
         console.log(res);
         setLoading(false);
         alert('Registered Successfully.');
         navigation.navigate(Route.Login);
-      }
-     
-      ).catch((err)=>console.log(err));
+      })
+      .catch(err => console.log(err));
+      
     } else {
       setErrorMsg(validationErrors);
     }
