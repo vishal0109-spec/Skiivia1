@@ -7,17 +7,17 @@ import {
 } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import firestore from '@react-native-firebase/firestore';
-import {camera} from '../Utils/img';
-import Button from '../Components/CustomButton';
+import {camera} from '../../../Utils/img';
+import Button from '../../../Components/CustomButton';
 import {
   descriptinBoxTxt,
   descriptionTxt,
   uploadPostTxt,
   uploadTxt,
-} from '../Utils/constant';
+} from '../../../Utils/constant';
 import {ScrollView} from 'react-native-gesture-handler';
 import storage from '@react-native-firebase/storage';
-import LoaderScreen from './LoaderScreen';
+import LoaderScreen from '../../LoaderScreen';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Styles } from './uploadStyles';

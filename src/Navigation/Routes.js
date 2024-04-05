@@ -6,7 +6,6 @@ export const Route = {
     //AuthStack Screen
     Login : 'Login',
     SignUP:'SignUP',
-    GetStarted:'GetStarted',
     ForgotPassword:'ForgotPassword',
 
     //AppStack Screen

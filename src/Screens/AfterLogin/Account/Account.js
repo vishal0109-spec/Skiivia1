@@ -14,7 +14,7 @@ import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 
 //user-define imports
-import Button from '../Components/CustomButton';
+import Button from '../../../Components/CustomButton';
 import {
   LoginWith,
   camera,
@@ -24,16 +24,16 @@ import {
   profileBack,
   upload,
   userProfile,
-} from '../Utils/img';
+} from '../../../Utils/img';
 import {
   deviceTxt,
   editProfile,
   galleryTxt,
   pop1Txt,
   pop2Txt,
-} from '../Utils/constant';
-import EditProfile from './EditProfile';
-import { Styles } from './accountStyles';
+} from '../../../Utils/constant';
+import EditProfile from '../EditProfile';
+import {Styles} from './accountStyles';
 
 const Account = () => {
   const navigation = useNavigation();
@@ -145,9 +145,9 @@ const Account = () => {
         alert('Image uploaded successfully!');
 
         if (clickType === 'Profile') {
-          setProfilePhoto(selectedImage);
+          setProfilePhoto(url);
         } else if (clickType === 'Cover') {
-          setCoverPhoto(selectedImage);
+          setCoverPhoto(url);
         }
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -166,9 +166,9 @@ const Account = () => {
         <TouchableWithoutFeedback onPress={closeEditView}>
           <View style={Styles.allContainers}>
             <View style={Styles.allContainers}>
-              {coverPhoto == null ? (
+              {coverPhoto ? (
                 <ImageBackground
-                  source={profileBack}
+                  source={{uri: coverPhoto}}
                   style={Styles.profileBack}>
                   <View style={Styles.topNav}>
                     <Button
@@ -186,7 +186,7 @@ const Account = () => {
                 </ImageBackground>
               ) : (
                 <ImageBackground
-                  source={{uri: coverPhoto.assets[0].uri}}
+                  source={profileBack}
                   style={Styles.profileBack}>
                   <View style={Styles.topNav}>
                     <Button
@@ -207,13 +207,13 @@ const Account = () => {
 
             <View style={Styles.allContainers}>
               <View style={Styles.userProfileContainer2}>
-                {profilePhoto == null ? (
-                  <Button icon={userProfile} iconStyle={Styles.userProfile} />
-                ) : (
+                {profilePhoto ? (
                   <Image
-                    source={{uri: profilePhoto.assets[0].uri}}
+                    source={{uri: profilePhoto}}
                     style={Styles.userProfile}
                   />
+                ) : (
+                  <Button icon={userProfile} iconStyle={Styles.userProfile} />
                 )}
 
                 <Button

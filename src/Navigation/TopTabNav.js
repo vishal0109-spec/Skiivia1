@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {Text, View} from 'react-native';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import Upcoming from '../Screens/Upcoming';
-import Past from '../Screens/Past';
+import Upcoming from '../Screens/AfterLogin/TopTabs/Upcoming';
+import Past from '../Screens/AfterLogin/TopTabs/Past';
 import { tabBarstyles } from './tabBarStyle';
 
 const TopTab = createMaterialTopTabNavigator();

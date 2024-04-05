@@ -12,8 +12,8 @@ import {
 } from '@react-native-google-signin/google-signin';
 
 //user define
-import Upload from '../Screens/Upload';
-import Account from '../Screens/Account';
+import Upload from '../Screens/AfterLogin/Upload/Upload';
+import Account from '../Screens/AfterLogin/Account/Account';
 import TabRoutes from './TabRoutes';
 import {Home} from '../Screens';
 import Button from '../Components/CustomButton';

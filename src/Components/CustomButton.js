@@ -1,6 +1,8 @@
 import { View, Text, TouchableOpacity,Image } from 'react-native';
 import React from 'react';
-import { styles } from '../Screens/styles';
+
+//user-define import
+import { styles } from '../Screens/BeforeLogin/styles';
 
 const Button = ({onPress,title,icon,style,iconStyle,btnStyle}) => {
   return (

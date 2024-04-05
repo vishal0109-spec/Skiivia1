@@ -6,8 +6,8 @@ import {
 } from 'react-native-responsive-screen';
 
 //user-define imports
-import Button from '../Components/CustomButton';
-import { drawer } from '../Utils/img';
+import Button from '../../Components/CustomButton';
+import { drawer } from '../../Utils/img';
 import { useNavigation } from '@react-navigation/native';
 
 const EditProfile = () => {

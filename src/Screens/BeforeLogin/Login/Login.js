@@ -9,6 +9,19 @@ import {
   Alert,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import auth from '@react-native-firebase/auth';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
+import firestore from '@react-native-firebase/firestore';
+import axios from 'axios';
+import {LoginManager, AccessToken, Profile} from 'react-native-fbsdk-next';
+
+//user-define import
 import {
   back,
   logo,
@@ -18,10 +31,7 @@ import {
   Passlogo,
   Navback,
   LoginWith,
-} from '../Utils/img';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {styles} from './styles';
-import {useNavigation} from '@react-navigation/native';
+} from '../../../Utils/img';
 import {
   continueWithApple,
   continueWithFacebook,
@@ -34,27 +44,19 @@ import {
   orLogin,
   pass,
   subTxt,
-} from '../Utils/constant';
-import {useDispatch} from 'react-redux';
-import auth from '@react-native-firebase/auth';
-import {
-  GoogleSignin,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
-import firestore from '@react-native-firebase/firestore';
-import {LoginManager, AccessToken, Profile} from 'react-native-fbsdk-next';
-
-//user-define import
-import {Home, SignUp} from '../Screens';
-import {LOGIN} from '../Redux/Type';
+} from '../../../Utils/constant';
+import {styles} from './styles';
+import {Home, SignUp} from '..';
+import {LOGIN} from '../../Redux/Type';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Button from '../Components/CustomButton';
-import {loginAction} from '../Redux/Actions/loginAction';
-import {Route} from '../Navigation/Routes';
-import {isValidLength, validateEmail} from '../Validaton';
-import LoaderScreen from './LoaderScreen';
-import axios from 'axios';
-import {loginRequest} from '../Services/api';
+import {isValidLength, validateEmail} from '../../../Validaton';
+import Button from '../../../Components/CustomButton';
+import LoaderScreen from '../../LoaderScreen';
+import { ApiConfig } from '../../../Services/apiConfig';
+import { loginUrl } from '../../../Services/api';
+import { loginAction } from '../../../Redux/Actions/loginAction';
+import { Route } from '../../../Navigation/Routes';
+
 
 const Login = () => {
   const navigation = useNavigation();
@@ -95,11 +97,24 @@ const Login = () => {
     //   }
     // }
 
-    await loginRequest(email, password)
+    const body = {
+      data: {
+        type: 'email_account',
+        attributes: {
+          email: email,
+          password: password,
+        },
+      },
+    };
+    new ApiConfig()
+      .postJSON(loginUrl, body)
       .then(res => {
-        dispatch(loginAction(res.data));
+        console.log(res);
+        dispatch(loginAction(res.data.attributes));
       })
-      .catch(err => console.log(err));
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   const register = () => {

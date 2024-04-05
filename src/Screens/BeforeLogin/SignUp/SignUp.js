@@ -12,10 +12,11 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import CheckBox from 'react-native-check-box';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 
 //user-define import
-import Button from '../Components/CustomButton';
-import {Navback, Passlogo, arrow, logo, warning} from '../Utils/img';
+import Button from '../../../Components/CustomButton';
+import {Navback, Passlogo, arrow, logo, warning} from '../../../Utils/img';
 import {
   cnfrmPass,
   cnfrmationTxt,
@@ -34,22 +35,20 @@ import {
   rgstrPasTxt,
   salutation,
   yearTxt,
-} from '../Utils/constant';
+} from '../../../Utils/constant';
 import {styles} from './resgisterStyle';
-import {isValidLength, validateEmail, validateRegister} from '../Validaton';
-import {useNavigation} from '@react-navigation/native';
-import {Route} from '../Navigation/Routes';
-import LoaderScreen from './LoaderScreen';
+import {isValidLength, validateEmail, validateRegister} from '../../../Validaton';
+import {Route} from '../../../Navigation/Routes';
+import LoaderScreen from '../../LoaderScreen';
 import axios from 'axios';
-import { signUpRequest } from '../Services/api';
+import {loginUrl} from '../../../Services/api';
+import {ApiConfig} from '../../../Services/apiConfig';
 
 const SignUp = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [selectedSalutation, setSelectedSalutation] = useState(null);
-
   const [loading, setLoading] = useState(false);
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confrmPassword, setConfrmPassword] = useState('');
@@ -107,14 +106,28 @@ const SignUp = () => {
       await AsyncStorage.setItem('Name', name);
       await AsyncStorage.setItem('Email', email);
 
-      await signUpRequest(name, email, password, phnNo).then(res => {
-        console.log(res);
-        setLoading(false);
-        alert('Registered Successfully.');
-        navigation.navigate(Route.Login);
-      })
-      .catch(err => console.log(err));
-      
+      const body = {
+        data: {
+          type: 'email_account',
+          attributes: {
+            full_name: name,
+            email: email,
+            password: password,
+            full_phone_number: phnNo,
+          },
+        },
+      };
+      console.log('body', body);
+      new ApiConfig()
+        .postJSON(loginUrl, body)
+        .then(res => {
+          console.log(res);
+          setLoading(false);
+          navigation.navigate(Route.Login);
+        })
+        .catch(error => {
+          console.log( error);
+        });
     } else {
       setErrorMsg(validationErrors);
     }

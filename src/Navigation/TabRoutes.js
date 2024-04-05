@@ -3,11 +3,11 @@ import {Image, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Home} from '../Screens';
-import Upload from '../Screens/Upload';
-import Account from '../Screens/Account';
+import Upload from '../Screens/AfterLogin/Upload/Upload';
+import Account from '../Screens/AfterLogin/Account/Account';
 import {account, bell, home, upload} from '../Utils/img';
 import {tabBarstyles} from './tabBarStyle';
-import Notification from '../Screens/Notification';
+import Notification from '../Screens/AfterLogin/Notification/Notification';
 
 const BottomTab = createBottomTabNavigator();
 
