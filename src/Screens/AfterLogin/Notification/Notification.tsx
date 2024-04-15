@@ -13,7 +13,7 @@ import TopTabs from '../../../Navigation/TopTabNav';
 
 
 const Notification = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   return (
     <View style={{flex: 1}}>
@@ -46,7 +46,6 @@ const Styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#f3b232',
-    shadowColor: 'gray',
     height: 30,
     shadowOpacity: 0.2,
     shadowColor: '#000000',

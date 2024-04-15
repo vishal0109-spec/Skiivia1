@@ -4,13 +4,13 @@ import {Provider} from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
 
 //user-define import 
-import {store} from './src/Redux/store';
 import Navigator from './src/Navigation/navigator';
-// import { styles } from './src/Screens/BeforeLogin/styles';
 import { Alert } from 'react-native';
 import { showNotification } from './notifeeDis';
 import SplashScreen from 'react-native-splash-screen';
 import { styles } from './src/Screens/BeforeLogin/Login/styles';
+import { store } from './src/Redux/store';
+
 
 //new branch
 const App = () => {

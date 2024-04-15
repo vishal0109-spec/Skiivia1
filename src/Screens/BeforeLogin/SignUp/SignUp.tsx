@@ -1,22 +1,15 @@
-import React, {useRef, useState} from 'react';
-import {
-  View,
-  TextInput,
-  Text,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import React, { useRef, useState } from 'react';
+import { View, TextInput, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import CheckBox from 'react-native-check-box';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 //user-define import
 import Button from '../../../Components/CustomButton';
-import {Navback, Passlogo, arrow, logo, warning} from '../../../Utils/img';
+import { Navback, Passlogo, arrow, logo, warning } from '../../../Utils/img';
 import {
   cnfrmPass,
   cnfrmationTxt,
@@ -36,53 +29,60 @@ import {
   salutation,
   yearTxt,
 } from '../../../Utils/constant';
-import {styles} from './resgisterStyle';
-import {isValidLength, validateEmail, validateRegister} from '../../../Validaton';
-import {Route} from '../../../Navigation/Routes';
+import { styles } from './resgisterStyle';
+import { isValidLength, validateEmail, validateRegister,  } from '../../../Validaton';
+import { Route } from '../../../Navigation/Routes';
 import LoaderScreen from '../../LoaderScreen';
 import axios from 'axios';
-import {loginUrl} from '../../../Services/api';
-import {ApiConfig} from '../../../Services/apiConfig';
+import { loginUrl } from '../../../Services/api';
+import { ApiConfig } from '../../../Services/apiConfig';
 
-const SignUp = () => {
-  const [isChecked, setIsChecked] = useState(false);
-  const [showOptions, setShowOptions] = useState(false);
-  const [selectedSalutation, setSelectedSalutation] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confrmPassword, setConfrmPassword] = useState('');
-  const [seePass, setSeePass] = useState(true);
-  const [seePass2, setSeePass2] = useState(true);
-  const [error, setError] = useState('');
-  const [passError, setPassError] = useState('');
-  const [confrmPasswordError, setConfrmPasswordError] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [phnNo, setPhnNo] = useState('');
-  const [dayValue, setDayValue] = useState('');
-  const [mnthValue, setMnthValue] = useState('');
-  const [yearValue, setYearValue] = useState('');
+const SignUp: React.FC = () => {
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [showOptions, setShowOptions] = useState<boolean>(false);
+  const [selectedSalutation, setSelectedSalutation] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confrmPassword, setConfrmPassword] = useState<string>('');
+  const [seePass, setSeePass] = useState<boolean>(true);
+  const [seePass2, setSeePass2] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
+  const [passError, setPassError] = useState<string>('');
+  const [confrmPasswordError, setConfrmPasswordError] = useState<string>('');
+  const [errorMsg, setErrorMsg] = useState<{ [key: string]: string }>({});
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [phnNo, setPhnNo] = useState<string>('');
+  const [dayValue, setDayValue] = useState<string>('');
+  const [mnthValue, setMnthValue] = useState<string>('');
+  const [yearValue, setYearValue] = useState<string>('');
 
-  const navigation = useNavigation();
-  const frstNameRef = useRef();
-  const scndNameRef = useRef();
-  const emlRef = useRef();
-  const phnRef = useRef();
-  const yourpassRef = useRef();
-  const cnfrmPassRef = useRef();
-  const dayRef = useRef();
-  const mnthRef = useRef();
-  const yearRef = useRef();
+  const navigation = useNavigation<any>();
+  const frstNameRef = useRef<TextInput>(null);
+  const scndNameRef = useRef<TextInput>(null);
+  const emlRef = useRef<TextInput>(null);
+  const phnRef = useRef<TextInput>(null);
+  const yourpassRef = useRef<TextInput>(null);
+  const cnfrmPassRef = useRef<TextInput>(null);
+  const dayRef = useRef<TextInput>(null);
+  const mnthRef = useRef<TextInput>(null);
+  const yearRef = useRef<TextInput>(null);
 
-  const handleSalutationSelect = salutation => {
+  const handleSalutationSelect = (salutation: string) => {
     setSelectedSalutation(salutation);
     setShowOptions(false);
   };
 
   const handleRegister = async () => {
-    const validationErrors = validateRegister(
+    const validationErrors: {
+      firstName?: string;
+      lastName?: string;
+      selectedSalutation?: string;
+      phnNo?: string;
+      isChecked?: string;
+      dob?: string;
+    }= validateRegister(
       firstName,
       lastName,
       selectedSalutation,
@@ -126,7 +126,7 @@ const SignUp = () => {
           navigation.navigate(Route.Login);
         })
         .catch(error => {
-          console.log( error);
+          console.log(error);
         });
     } else {
       setErrorMsg(validationErrors);
@@ -143,7 +143,9 @@ const SignUp = () => {
             <KeyboardAwareScrollView contentContainerStyle={styles.container}>
               <View style={styles.frame1}>
                 <View style={styles.topNav}>
-                  <Button icon={Navback} iconStyle={styles.navBack} />
+                  <Button icon={Navback} iconStyle={styles.navBack} onPress={function (): void {
+                      throw new Error('Function not implemented.');
+                    } } />
                   <Image style={styles.logoIcon} source={logo} />
                 </View>
               </View>
@@ -154,12 +156,12 @@ const SignUp = () => {
                 </View>
                 <View style={styles.container5}>
                   <View>
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                       <TextInput
                         placeholder={salutation}
                         style={styles.inputField}
                         value={selectedSalutation || ''}
-                        onChangeText={() => {}}
+                        onChangeText={() => { }}
                         onFocus={() => setShowOptions(true)}
                         onBlur={() => {
                           if (selectedSalutation !== null) {
@@ -167,10 +169,12 @@ const SignUp = () => {
                           }
                         }}
                         onSubmitEditing={() => {
-                          frstNameRef.current.focus();
+                          frstNameRef.current?.focus();
                         }}
                       />
-                      <Button icon={arrow} iconStyle={styles.arrwLogo} />
+                      <Button icon={arrow} iconStyle={styles.arrwLogo} onPress={function (): void {
+                          throw new Error('Function not implemented.');
+                        } } />
                     </View>
                     {errorMsg.selectedSalutation ? (
                       <Text style={styles.errorMessage}>
@@ -202,7 +206,7 @@ const SignUp = () => {
                         onChangeText={setFirstName}
                         ref={frstNameRef}
                         onSubmitEditing={() => {
-                          scndNameRef.current.focus();
+                          scndNameRef.current?.focus();
                         }}
                       />
                       {errorMsg.firstName ? (
@@ -220,7 +224,7 @@ const SignUp = () => {
                         style={styles.lastName}
                         ref={scndNameRef}
                         onSubmitEditing={() => {
-                          emlRef.current.focus();
+                          emlRef.current?.focus();
                         }}
                       />
                       {errorMsg.lastName ? (
@@ -237,7 +241,7 @@ const SignUp = () => {
                       style={styles.inputField}
                       ref={emlRef}
                       onSubmitEditing={() => {
-                        phnRef.current.focus();
+                        phnRef.current?.focus();
                       }}
                       onChangeText={text => {
                         setEmail(text);
@@ -259,7 +263,7 @@ const SignUp = () => {
                       style={styles.inputField}
                       ref={phnRef}
                       onSubmitEditing={() => {
-                        yourpassRef.current.focus();
+                        yourpassRef.current?.focus();
                       }}
                     />
                     {errorMsg.phnNo ? (
@@ -269,7 +273,9 @@ const SignUp = () => {
 
                   <View>
                     <View style={styles.warnInst}>
-                      <Button icon={warning} iconStyle={styles.warnLogo} />
+                      <Button icon={warning} iconStyle={styles.warnLogo} onPress={function (): void {
+                          throw new Error('Function not implemented.');
+                        } } />
                       <Text style={styles.pasInstTxt}>{pasInstTxt}</Text>
                     </View>
 
@@ -280,7 +286,7 @@ const SignUp = () => {
                         secureTextEntry={seePass}
                         ref={yourpassRef}
                         onSubmitEditing={() => {
-                          cnfrmPassRef.current.focus();
+                          cnfrmPassRef.current?.focus();
                         }}
                         onChangeText={text => {
                           setPassword(text);
@@ -306,7 +312,7 @@ const SignUp = () => {
                         ref={cnfrmPassRef}
                         secureTextEntry={seePass2}
                         onSubmitEditing={() => {
-                          dayRef.current.focus();
+                          dayRef.current?.focus();
                         }}
                         onChangeText={text => {
                           setConfrmPassword(text);
@@ -338,7 +344,7 @@ const SignUp = () => {
                         style={styles.inputField2}
                         ref={dayRef}
                         onSubmitEditing={() => {
-                          mnthRef.current.focus();
+                          mnthRef.current?.focus();
                         }}
                       />
 
@@ -350,7 +356,7 @@ const SignUp = () => {
                         style={styles.inputField2}
                         ref={mnthRef}
                         onSubmitEditing={() => {
-                          yearRef.current.focus();
+                          yearRef.current?.focus();
                         }}
                       />
                       <TextInput
@@ -369,7 +375,7 @@ const SignUp = () => {
                   <View>
                     <View style={styles.txtContainer}>
                       <CheckBox
-                        style={{flex: 1}}
+                        style={{ flex: 1 }}
                         onClick={() => setIsChecked(!isChecked)}
                         isChecked={isChecked}
                         rightText={cnfrmationTxt}

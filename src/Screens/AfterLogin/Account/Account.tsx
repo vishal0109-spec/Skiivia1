@@ -1,16 +1,10 @@
-import {
-  View,
-  Text,
-  ImageBackground,
-  Image,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import { View, Text, ImageBackground, Image, TouchableWithoutFeedback, Alert } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import {useNavigation} from '@react-navigation/native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {ScrollView} from 'react-native-gesture-handler';
-import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
+import { launchImageLibrary, launchCamera, MediaType, ImagePickerResponse } from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 
 //user-define imports
@@ -33,23 +27,32 @@ import {
   pop2Txt,
 } from '../../../Utils/constant';
 import EditProfile from '../EditProfile';
-import {Styles} from './accountStyles';
+import { Styles } from './accountStyles';
 
-const Account = () => {
-  const navigation = useNavigation();
-  const [postData, setPostData] = useState([]);
-  const [showOptionScreen, setShowOptionScreen] = useState(false);
-  const [showEditView, setShowEditView] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [clickType, setClickType] = useState('');
-  const [coverPhoto, setCoverPhoto] = useState(null);
-  const [profilePhoto, setProfilePhoto] = useState(null);
+interface UserData {
+  selectedSalutation: string;
+  name: string;
+  phnNo: string;
+  email: string;
+  dob: string;
+}
+
+const Account: FC = () => {
+  const navigation = useNavigation<any>();
+  const [postData, setPostData] = useState<UserData | null>(null);
+  const [showOptionScreen, setShowOptionScreen] = useState<boolean>(false);
+  const [showEditView, setShowEditView] = useState<string>('');
+  const [selectedImage, setSelectedImage] = useState<ImagePickerResponse | null>(null);
+  const [clickType, setClickType] = useState<string>('');
+  const [coverPhoto, setCoverPhoto] = useState<string | null>(null);
+  const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
+  
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const querySnapshot = await firestore().collection('users').get();
-        const userDataArray = querySnapshot.docs.map(doc => doc.data());
+        const userDataArray = querySnapshot.docs.map(doc => doc.data() as UserData);
         if (userDataArray.length > 0) {
           setPostData(userDataArray[0]);
         }
@@ -60,80 +63,83 @@ const Account = () => {
     fetchUserData();
   }, []);
 
-  const editProfilePhoto = () => {
+  useEffect(() => {
+    if (selectedImage) {
+      uploadImage();
+    }
+  }, [selectedImage]);
+
+  const editProfilePhoto = (): void => {
     setShowEditView('profile');
   };
 
-  const editCoverPhoto = () => {
+  const editCoverPhoto = (): void => {
     setShowEditView('cover');
   };
 
-  const uploadCover = () => {
+  const uploadCover = (): void => {
     setShowOptionScreen(true);
     setClickType('Cover');
   };
 
-  const uploadProfile = () => {
+  const uploadProfile = (): void => {
     setShowOptionScreen(true);
     setClickType('Profile');
   };
 
-  const handleGalleryPress = async () => {
+  const handleGalleryPress = async (): Promise<void> => {
     setShowOptionScreen(false);
     const options = {
-      mediaType: 'photo',
+      mediaType: 'photo' as MediaType,
     };
     launchImageLibrary(options, response => {
       if (response.didCancel) {
         console.log('User cancelled image selection');
-      } else if (response.error) {
-        console.error('Image picker error:', response.error);
+      } else if (response.errorMessage) {
+        console.error('Image picker error:', response.errorMessage);
       } else {
-        let source = response;
-        setSelectedImage(source);
+        setSelectedImage(response);
         uploadImage();
       }
     });
   };
 
-  const handleCameraPress = async () => {
+  const handleCameraPress = async (): Promise<void> => {
     setShowOptionScreen(false);
     const options = {
-      mediaType: 'photo',
+      mediaType: 'photo' as MediaType,
     };
     launchCamera(options, response => {
       if (response.didCancel) {
         console.log('User cancelled image capture');
-      } else if (response.error) {
-        console.error('Camera error:', response.error);
+      } else if (response.errorMessage) {
+        console.error('Camera error:', response.errorMessage);
       } else {
-        let source = response;
-        setSelectedImage(source);
+        setSelectedImage(response);
         uploadImage();
       }
     });
   };
 
-  const closeOptionScreen = () => {
+  const closeOptionScreen = (): void => {
     setShowOptionScreen(false);
   };
 
-  const closeEditView = () => {
-    setShowEditView(false);
+  const closeEditView = (): void => {
+    setShowEditView('');
   };
 
-  const uploadImage = async () => {
+  const uploadImage = async (): Promise<void> => {
     if (selectedImage && selectedImage.assets) {
       try {
         const reference = storage().ref(selectedImage.assets[0].fileName);
-        const pathToFile = selectedImage.assets[0].uri;
+        const pathToFile: string = selectedImage?.assets[0]?.uri ?? ''; 
         await reference.putFile(pathToFile);
-
         const url = await storage()
           .ref(selectedImage.assets[0].fileName)
           .getDownloadURL();
-        const email = postData.email;
-        const name = postData.name;
+        const email = postData?.email;
+        const name = postData?.name;
 
         await firestore().collection('posts').add({
           image: url,
@@ -142,7 +148,7 @@ const Account = () => {
           timestamp: firestore.Timestamp.now(),
         });
 
-        alert('Image uploaded successfully!');
+        Alert.alert('Image uploaded successfully!');
 
         if (clickType === 'Profile') {
           setProfilePhoto(url);
@@ -151,7 +157,7 @@ const Account = () => {
         }
       } catch (error) {
         console.error('Error uploading image:', error);
-        alert('Error uploading image. Please try again.');
+        Alert.alert('Error uploading image. Please try again.');
       } finally {
         setSelectedImage(null);
       }
@@ -213,7 +219,9 @@ const Account = () => {
                     style={Styles.userProfile}
                   />
                 ) : (
-                  <Button icon={userProfile} iconStyle={Styles.userProfile} />
+                  <Button icon={userProfile} iconStyle={Styles.userProfile} onPress={function (): void {
+                      throw new Error('Function not implemented.');
+                    } } />
                 )}
 
                 <Button
@@ -346,3 +354,4 @@ const Account = () => {
 };
 
 export default Account;
+

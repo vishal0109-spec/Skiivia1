@@ -96,7 +96,7 @@ export const styles = StyleSheet.create({
     borderRadius: hp(0.7),
     borderColor: '#E8E8E8',
     borderWidth: 1,
-    height: hp(5),
+    height: hp(5.1),
     borderStyle: 'solid',
     paddingLeft: wp(3),
     color: '#4B4F54',
@@ -119,6 +119,7 @@ export const styles = StyleSheet.create({
     width: wp(44),
     borderStyle: 'solid',
     paddingLeft: wp(3),
+    paddingTop:hp(1)
   },
   lastName: {
     backgroundColor: '#F9F9F9',
@@ -129,6 +130,7 @@ export const styles = StyleSheet.create({
     width: wp(44),
     borderStyle: 'solid',
     paddingLeft: wp(3),
+    paddingTop:hp(1)
   },
   passLogo: {
     height: hp(1.6),
@@ -163,7 +165,7 @@ export const styles = StyleSheet.create({
     borderRadius: hp(0.7),
     borderColor: '#E8E8E8',
     borderWidth: 1,
-    height: hp(5),
+    height: hp(5.1),
     borderStyle: 'solid',
     paddingLeft: wp(3),
     marginTop: hp(1),
@@ -174,7 +176,6 @@ export const styles = StyleSheet.create({
     shadowColor: 'gray',
     height: hp(6.3),
     shadowOpacity: 0.2,
-    shadowColor: '#000000',
     shadowRadius: 3,
     elevation: 20,
     shadowOffset: {

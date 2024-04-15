@@ -19,7 +19,6 @@ export const styles = StyleSheet.create({
   actInd:{
     justifyContent: 'space-around',
     color: '#000',
-    size: 70,
   },
   loaderScreenContainer:{
     flex: 1,
@@ -92,7 +91,6 @@ export const styles = StyleSheet.create({
   topNav: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginTop: hp(2),
     marginLeft: wp(4),
     marginTop: hp(5.6),
   },
@@ -112,6 +110,7 @@ export const styles = StyleSheet.create({
     borderStyle: 'solid',
     marginLeft: wp(4),
     paddingLeft: wp(3),
+    paddingTop:hp(1)
   },
   fieldIcons: {
     top: -hp(4),
@@ -130,6 +129,8 @@ export const styles = StyleSheet.create({
     borderColor: '#E8E8E8',
     borderStyle: 'solid',
     marginLeft: wp(4),
+    paddingTop:hp(1),
+    paddingLeft:wp(3.1)
   },
   forgotPassword: {
     color: '#d06f1a',
@@ -151,7 +152,6 @@ export const styles = StyleSheet.create({
     shadowColor: 'gray',
     height: hp(6.3),
     shadowOpacity: 0.2,
-    shadowColor: '#000000',
     shadowRadius: 3,
     elevation: 20,
     shadowOffset: {
@@ -253,11 +253,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     width: wp(90),
     borderRadius: hp(1.3),
-    borderRadius: hp(1.2),
     alignSelf: 'stretch',
     padding: hp(1.8),
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#000',
   },

@@ -1,27 +1,17 @@
 import {View, Text, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {DrawerContent, createDrawerNavigator} from '@react-navigation/drawer';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch} from 'react-redux';
-import {
-  GoogleSignin,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 //user define
-import Upload from '../Screens/AfterLogin/Upload/Upload';
-import Account from '../Screens/AfterLogin/Account/Account';
 import TabRoutes from './TabRoutes';
-import {Home} from '../Screens';
 import Button from '../Components/CustomButton';
 import {
-  account,
   car,
   deleteIcon,
-  home,
   leaderboard,
   legal,
   letterC,
@@ -30,7 +20,7 @@ import {
   rightArrow,
   security,
   setting,
-  upload,
+  userProfile,
   wallet,
 } from '../Utils/img';
 import {tabBarstyles} from './tabBarStyle';
@@ -42,8 +32,6 @@ import {
   legalTxt,
   logoutTxt,
   notificationTxt,
-  profilTxt,
-  profilTxt2,
   rideTxt,
   settingTxt,
   walletTxt,
@@ -52,11 +40,16 @@ import {logOutAction} from '../Redux/Actions/logOutAction';
 
 const Drawer = createDrawerNavigator();
 
-function CustomDrawerContent() {
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
+interface PostData {
+  photo: string;
+  name: string;
+}
 
-  const [postData, setPostData] = useState([]);
+function CustomDrawerContent(): JSX.Element {
+  const navigation = useNavigation<any>();
+  const dispatch = useDispatch<any>();
+
+  const [postData, setPostData] = useState<PostData[]>();
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -66,12 +59,15 @@ function CustomDrawerContent() {
   }, []);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUserData = async (): Promise<void> => {
       try {
         const querySnapshot = await firestore().collection('users').get();
-        const userDataArray = querySnapshot.docs.map(doc => doc.data());
+        const userDataArray = querySnapshot.docs.map(
+          doc => doc.data() as PostData,
+        );
+        console.log();
         if (userDataArray.length > 0) {
-          setPostData(userDataArray[0]);
+          setPostData(userDataArray);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -81,7 +77,7 @@ function CustomDrawerContent() {
     fetchUserData();
   }, []);
 
-  const logOut = async () => {
+  const logOut = async (): Promise<void> => {
     try {
       await GoogleSignin.signOut();
       dispatch(logOutAction());
@@ -96,25 +92,34 @@ function CustomDrawerContent() {
         <View style={tabBarstyles.profileContainer}>
           <View style={tabBarstyles.buttonContainer}>
             <View style={tabBarstyles.drawerIconOpacity}>
-              {postData && postData.photo ? (
+              {postData && postData.length > 0 && postData[0]?.photo ? (
                 <Image
-                  source={{uri: postData.photo}}
+                  source={{uri: postData[0]?.photo}}
                   style={tabBarstyles.profileIcon}
                 />
               ) : (
                 <Button
                   style={tabBarstyles.drawerIconOpacity}
-                  icon={letterC}
+                  icon={userProfile}
                   iconStyle={tabBarstyles.drawerIcon}
+                  onPress={function (): void {
+                    throw new Error('Function not implemented.');
+                  }}
                 />
               )}
               <View style={tabBarstyles.profileTxtContainer}>
                 <Text style={tabBarstyles.drawerIconTxt}>
-                  {postData ? postData.name : 'User'}
+                  {postData && postData.length > 0 ? postData[0].name : 'User'}
                 </Text>
               </View>
             </View>
-            <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon} />
+            <Button
+              icon={rightArrow}
+              iconStyle={tabBarstyles.arrowIcon}
+              onPress={function (): void {
+                throw new Error('Function not implemented.');
+              }}
+            />
           </View>
         </View>
         <View style={tabBarstyles.profileContainer2}>
@@ -126,8 +131,17 @@ function CustomDrawerContent() {
                 icon={car}
                 iconStyle={tabBarstyles.drawerIcon2}
                 btnStyle={tabBarstyles.drawerIconTxt2}
+                onPress={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
               />
-              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+              <Button
+                icon={rightArrow}
+                iconStyle={tabBarstyles.arrowIcon2}
+                onPress={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
             </View>
             <View style={tabBarstyles.buttonContainer2}>
               <Button
@@ -136,8 +150,17 @@ function CustomDrawerContent() {
                 icon={leaderboard}
                 iconStyle={tabBarstyles.drawerIcon2}
                 btnStyle={tabBarstyles.drawerIconTxt2}
+                onPress={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
               />
-              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+              <Button
+                icon={rightArrow}
+                iconStyle={tabBarstyles.arrowIcon2}
+                onPress={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
             </View>
             <View style={tabBarstyles.buttonContainer2}>
               <Button
@@ -146,8 +169,17 @@ function CustomDrawerContent() {
                 icon={wallet}
                 iconStyle={tabBarstyles.drawerIcon2}
                 btnStyle={tabBarstyles.drawerIconTxt2}
+                onPress={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
               />
-              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+              <Button
+                icon={rightArrow}
+                iconStyle={tabBarstyles.arrowIcon2}
+                onPress={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
             </View>
             <View style={tabBarstyles.buttonContainer2}>
               <Button
@@ -156,8 +188,17 @@ function CustomDrawerContent() {
                 icon={setting}
                 iconStyle={tabBarstyles.drawerIcon2}
                 btnStyle={tabBarstyles.drawerIconTxt2}
+                onPress={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
               />
-              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+              <Button
+                icon={rightArrow}
+                iconStyle={tabBarstyles.arrowIcon2}
+                onPress={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
             </View>
             <View style={tabBarstyles.buttonContainer2}>
               <Button
@@ -166,8 +207,17 @@ function CustomDrawerContent() {
                 icon={notification}
                 iconStyle={tabBarstyles.drawerIcon2}
                 btnStyle={tabBarstyles.drawerIconTxt2}
+                onPress={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
               />
-              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+              <Button
+                icon={rightArrow}
+                iconStyle={tabBarstyles.arrowIcon2}
+                onPress={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
             </View>
             <View style={tabBarstyles.buttonContainer2}>
               <Button
@@ -176,8 +226,17 @@ function CustomDrawerContent() {
                 icon={legal}
                 iconStyle={tabBarstyles.drawerIcon2}
                 btnStyle={tabBarstyles.drawerIconTxt2}
+                onPress={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
               />
-              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+              <Button
+                icon={rightArrow}
+                iconStyle={tabBarstyles.arrowIcon2}
+                onPress={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
             </View>
             <View style={tabBarstyles.buttonContainer2}>
               <Button
@@ -186,8 +245,17 @@ function CustomDrawerContent() {
                 icon={security}
                 iconStyle={tabBarstyles.drawerIcon2}
                 btnStyle={tabBarstyles.drawerIconTxt2}
+                onPress={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
               />
-              <Button icon={rightArrow} iconStyle={tabBarstyles.arrowIcon2} />
+              <Button
+                icon={rightArrow}
+                iconStyle={tabBarstyles.arrowIcon2}
+                onPress={function (): void {
+                  throw new Error('Function not implemented.');
+                }}
+              />
             </View>
           </View>
         </View>
@@ -210,6 +278,9 @@ function CustomDrawerContent() {
             icon={deleteIcon}
             iconStyle={tabBarstyles.drawerIcon3}
             btnStyle={tabBarstyles.drawerIconTxt3}
+            onPress={function (): void {
+              throw new Error('Function not implemented.');
+            }}
           />
         </View>
       </View>
@@ -217,7 +288,7 @@ function CustomDrawerContent() {
   );
 }
 
-const DrawerRoute = () => {
+const DrawerRoute = (): JSX.Element => {
   return (
     <Drawer.Navigator
       screenOptions={{

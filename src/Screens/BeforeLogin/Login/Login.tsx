@@ -1,102 +1,49 @@
-import {
-  View,
-  Text,
-  Image,
-  ImageBackground,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch} from 'react-redux';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import { View, Text, Image, ImageBackground, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
 import auth from '@react-native-firebase/auth';
-import {
-  GoogleSignin,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import firestore from '@react-native-firebase/firestore';
 import axios from 'axios';
-import {LoginManager, AccessToken, Profile} from 'react-native-fbsdk-next';
+import { LoginManager, AccessToken, Profile } from 'react-native-fbsdk-next';
 
 //user-define import
-import {
-  back,
-  logo,
-  Glogo,
-  Fblogo,
-  Alogo,
-  Passlogo,
-  Navback,
-  LoginWith,
-} from '../../../Utils/img';
-import {
-  continueWithApple,
-  continueWithFacebook,
-  continueWithGoogle,
-  createAccountTxt,
-  email,
-  forgotPassword,
-  loginTxt,
-  newToTxt,
-  orLogin,
-  pass,
-  subTxt,
-} from '../../../Utils/constant';
-import {styles} from './styles';
-import {Home, SignUp} from '..';
-import {LOGIN} from '../../Redux/Type';
+import { back, logo, Glogo, Fblogo, Alogo, Passlogo, Navback, LoginWith } from '../../../Utils/img';
+import { continueWithApple, continueWithFacebook, continueWithGoogle, createAccountTxt, email, forgotPassword, loginTxt, newToTxt, orLogin, pass, subTxt } from '../../../Utils/constant';
+import { styles } from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {isValidLength, validateEmail} from '../../../Validaton';
+import { isValidLength, validateEmail } from '../../../Validaton';
 import Button from '../../../Components/CustomButton';
 import LoaderScreen from '../../LoaderScreen';
 import { ApiConfig } from '../../../Services/apiConfig';
 import { loginUrl } from '../../../Services/api';
-import { loginAction } from '../../../Redux/Actions/loginAction';
 import { Route } from '../../../Navigation/Routes';
+import { loginAction } from '../../../Redux/Actions/loginAction';
 
+interface LoginProps {}
+interface UserData {
+  email: string;
+  name: string | null; 
+  photo: string | null;
+}
 
-const Login = () => {
-  const navigation = useNavigation();
-  const pssRef = useRef();
-  const dispatch = useDispatch();
+const Login: FC<LoginProps> = () => {
+  const navigation = useNavigation<any>();
+  const pssRef = useRef<TextInput>(null);
+  const dispatch = useDispatch<any>();
 
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [seePass, setSeePass] = useState(true);
-  const [error, setError] = useState('');
-  const [passError, setPassError] = useState('');
-  const [message, setMessage] = useState('');
-  const [userInfo, setUserInfo] = useState(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [seePass, setSeePass] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
+  const [passError, setPassError] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+  const [userInfo, setUserInfo] =  useState<UserData | null>(null);
 
-  const onLogin = async () => {
-    // try {
-    //   const {user} = await auth().signInWithEmailAndPassword(email, password);
-    //   if (!user.emailVerified) {
-    //     alert('Please verify your email before logging in.');
-    //     return;
-    //   }
-    //   const userData = {
-    //     email: user.email,
-    //     password: user.password,
-    //   };
-    //   dispatch(loginAction(userData));
-    // } catch (err) {
-    //   console.log(err.message);
-    //   if (err.code === 'auth/user-not-found') {
-    //     alert('Please register your account.');
-    //   } else if (err.code === 'auth/wrong-password') {
-    //     alert('Invalid credentials. Please try again.');
-    //   } else if (err.code === 'auth/invalid-email') {
-    //     alert('Please register your account.');
-    //   } else {
-    //     setError(err.message);
-    //   }
-    // }
-
+  const onLogin = async (): Promise<void> => {
     const body = {
       data: {
         type: 'email_account',
@@ -110,14 +57,20 @@ const Login = () => {
       .postJSON(loginUrl, body)
       .then(res => {
         console.log(res);
-        dispatch(loginAction(res.data.attributes));
+        const userData: UserData = {
+          email: res?.data?.attributes?.email || '',
+          name: null, 
+          photo: null,
+        };
+        dispatch(loginAction(userData));
       })
       .catch(error => {
         console.log(error);
       });
   };
+  
 
-  const register = () => {
+  const register = (): void => {
     navigation.navigate(Route.SignUP);
   };
 
@@ -128,26 +81,20 @@ const Login = () => {
     });
   }, []);
 
-  const googleLogin = async () => {
+  const googleLogin = async (): Promise<void> => {
     try {
       setLoading(true);
       await GoogleSignin.hasPlayServices();
       const usrInfo = await GoogleSignin.signIn();
-      setUserInfo(usrInfo);
-      console.log(usrInfo);
-      const {email, givenName, photo} = usrInfo.user;
-      const userData = {
-        email: email,
-        name: givenName,
-        photo: photo,
+      // Convert usrInfo to UserData
+      const userData: UserData = {
+        email: usrInfo.user.email,
+        name: usrInfo.user.givenName || '',
+        photo: usrInfo.user.photo || '',
       };
-      dispatch(loginAction(userData));
+      setUserInfo(userData);
 
-      await firestore().collection('users').doc(email).set({
-        email: email,
-        name: givenName,
-        photo: photo,
-      });
+      await firestore().collection('users').doc(userData.email).set(userData);
     } catch (error) {
       console.log(error);
     }
@@ -155,47 +102,60 @@ const Login = () => {
   };
 
   async function onFacebookButtonPress() {
-    const result = await LoginManager.logInWithPermissions(['public_profile']);
-
-    if (result.isCancelled) {
-      throw 'User cancelled the login process';
-    }
-
-    const data = await AccessToken.getCurrentAccessToken();
-    const currentProfile = await Profile.getCurrentProfile();
-    if (currentProfile) {
-      const {name, userID} = currentProfile;
-      await firestore().collection('users').doc(userID).set({
-        name,
-        userID,
+    try {
+      const result = await LoginManager.logInWithPermissions(['public_profile']);
+      if (result.isCancelled) {
+        throw new Error('User cancelled the login process');
+      }
+  
+      const data = await AccessToken.getCurrentAccessToken();
+      if (!data) {
+        throw new Error('Something went wrong obtaining access token');
+      }
+  
+      const currentProfile = await Profile.getCurrentProfile();
+      if (!currentProfile) {
+        throw new Error('Unable to retrieve profile data');
+      }
+  
+      const { name, userID } = currentProfile;
+  
+      await firestore().collection('users').doc(userID || '').set({
+        name: name || '',
+        userID: userID || '',
       });
+  
+      setLoading(true);
+      const userData: UserData = {
+        email: '',
+        name: name || '', 
+        photo: '', 
+      };
+      dispatch(loginAction(userData));
+  
+      const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+      await auth().signInWithCredential(facebookCredential);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(true);
-    dispatch(loginAction(data));
-
-    if (!data) {
-      throw 'Something went wrong obtaining access token';
-    }
-
-    const facebookCredential = auth.FacebookAuthProvider.credential(
-      data.accessToken,
-    );
-    return auth().signInWithCredential(facebookCredential);
-    setLoading(false);
   }
+  
+  
 
-  const forgotPass = () => {
+  const forgotPass = (): void => {
     if (email.trim() !== '') {
       auth()
         .sendPasswordResetEmail(email)
         .then(() => {
-          alert('Password reset email sent');
+          Alert.alert('Password reset email sent');
         })
         .catch(error => {
-          alert(error.message);
+          Alert.alert(error.message);
         });
     } else {
-      alert('Please Enter Registered Email!');
+      Alert.alert('Please Enter Registered Email!');
     }
   };
 
@@ -212,7 +172,9 @@ const Login = () => {
                   <ImageBackground style={styles.imageBgIcon} source={back}>
                     <View style={styles.frame1}>
                       <View style={styles.topNav}>
-                        <Button icon={Navback} iconStyle={styles.navBack} />
+                        <Button icon={Navback} iconStyle={styles.navBack} onPress={function (): void {
+                            throw new Error('Function not implemented.');
+                          } } />
 
                         <Image style={styles.logoIcon} source={logo} />
                       </View>
@@ -236,7 +198,7 @@ const Login = () => {
                       }}
                       returnKeyType="next"
                       onSubmitEditing={() => {
-                        pssRef.current.focus();
+                        pssRef.current?.focus();
                       }}
                     />
                     <View>
@@ -301,12 +263,13 @@ const Login = () => {
                       onPress={() => onFacebookButtonPress()}
                     />
                     <Button
-                      style={styles.button4}
-                      btnStyle={styles.continueWithApple}
-                      title={continueWithApple}
-                      icon={Alogo}
-                      iconStyle={styles.logoIconLayout}
-                    />
+                        style={styles.button4}
+                        btnStyle={styles.continueWithApple}
+                        title={continueWithApple}
+                        icon={Alogo}
+                        iconStyle={styles.logoIconLayout} onPress={function (): void {
+                          throw new Error('Function not implemented.');
+                        } }                    />
                   </View>
                 </View>
               </View>

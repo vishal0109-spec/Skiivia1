@@ -9,34 +9,71 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import firestore from '@react-native-firebase/firestore';
-import moment from 'moment';
+import moment, {Moment} from 'moment';
 
 //user-define imports
 import Button from '../../../Components/CustomButton';
 import {chat, drawer, heart, send, user} from '../../../Utils/img';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+
+interface PostData {
+  name: string;
+  timestamp: Moment;
+  image: string;
+  description: string;
+}
 
 const Home = () => {
-  const navigation = useNavigation();
-  const [postData, setPostData] = useState([]);
+  const navigation = useNavigation<any>();
+  const [postData, setPostData] = useState<PostData[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
+
   useEffect(() => {
     getData();
-  });
-  const getData = () => {
-    let tempData = [];
-    firestore()
-      .collection('posts')
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(documentSnapshot => {
-          tempData.push(documentSnapshot.data());
-        });
-        setPostData(tempData);
+  }, [page]);
+
+  const getData = async () => {
+    setLoading(true);
+    try {
+      const pageSize = 5;
+      const postsRef = firestore().collection('posts');
+      const query = postsRef
+        .orderBy('timestamp', 'desc')
+        .limit(pageSize * page);
+
+      const querySnapshot = await query.get();
+
+      setTotalPages(Math.ceil(querySnapshot.size / pageSize));
+      const newPostData = querySnapshot.docs.map(doc => {
+        const data = doc.data() as PostData;
+        return {
+          name: data.name,
+          timestamp: moment(data.timestamp.toDate()),
+          image: data.image,
+          description: data.description,
+        };
       });
+
+      setPostData([...postData, ...newPostData]);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const getTimeAgo = timestamp => {
-    return moment(timestamp.toDate()).fromNow();
+  const getTimeAgo = (timestamp: Moment) => {
+    return timestamp.fromNow();
+  };
+  const handleLoadMore = async () => {
+    if (page < totalPages && !loading) {
+      setLoading(true); 
+      setPage(page + 1);
+      await getData();
+      setLoading(false);
+    }
   };
 
   return (
@@ -52,7 +89,15 @@ const Home = () => {
           iconStyle={Styles.drawerIcon}
           onPress={() => navigation.openDrawer()}
         />
-        <Text style={{fontSize: 18, color: '#000', fontWeight: '600',alignSelf:'center',marginTop:10,marginLeft:10}}>
+        <Text
+          style={{
+            fontSize: 18,
+            color: '#000',
+            fontWeight: '600',
+            alignSelf: 'center',
+            marginTop: 10,
+            marginLeft: 10,
+          }}>
           Home
         </Text>
       </View>
@@ -61,7 +106,7 @@ const Home = () => {
         <FlatList
           showsVerticalScrollIndicator={false}
           data={postData}
-          renderItem={({item, index}) => {
+          renderItem={({item, index}: any) => {
             return (
               <View
                 style={{
@@ -77,22 +122,17 @@ const Home = () => {
                     alignItems: 'center',
                     marginTop: 10,
                   }}>
-                  <Image
-                    source={user}
-                    style={Styles.icon}
-                  />
+                  <Image source={user} style={Styles.icon} />
                   <View
                     style={{
-                      fontSize: 18,
-                      color: '#000',
                       marginLeft: 15,
                     }}>
-                    <Text>{item.name}</Text>
-                    <Text>{getTimeAgo(item.timestamp)}</Text>
+                    <Text>{item?.name}</Text>
+                    <Text>{getTimeAgo(item?.timestamp)}</Text>
                   </View>
                 </View>
                 <Image
-                  source={{uri: item.image}}
+                  source={{uri: item?.image}}
                   style={{
                     width: wp(80),
                     height: hp(50),
@@ -108,23 +148,20 @@ const Home = () => {
                     marginTop: 10,
                     marginLeft: 10,
                   }}>
-                  <Image
-                    source={heart}
-                    style={Styles.icon2}
-                  />
-                  <Image
-                    source={chat}
-                    style={Styles.icon2}
-                  />
-                  <Image
-                    source={send}
-                    style={Styles.icon2}
-                  />
+                  <Image source={heart} style={Styles.icon2} />
+                  <Image source={chat} style={Styles.icon2} />
+                  <Image source={send} style={Styles.icon2} />
                 </View>
                 <Text style={{margin: 20}}>{item.description}</Text>
               </View>
             );
           }}
+          keyExtractor={(item, index) => index.toString()}
+          onEndReached={handleLoadMore}
+          ListFooterComponent={() =>
+            loading && <Text style={{textAlign: 'center'}}>Loading...</Text>
+          }
+          onEndReachedThreshold={0.5}
         />
       ) : (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -149,20 +186,19 @@ const Styles = StyleSheet.create({
     top: hp(1),
     resizeMode: 'cover',
   },
-  icon:{
+  icon: {
     width: wp(10),
     height: hp(5),
     left: wp(2),
     top: hp(0.5),
-    bottom:hp(1),
+    bottom: hp(1),
     resizeMode: 'cover',
   },
-  icon2:{
+  icon2: {
     width: wp(6),
     height: hp(3),
     marginLeft: wp(5),
     top: hp(1),
     resizeMode: 'cover',
-  }
-
+  },
 });
