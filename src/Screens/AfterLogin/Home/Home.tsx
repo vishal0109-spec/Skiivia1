@@ -15,6 +15,7 @@ import moment, {Moment} from 'moment';
 import Button from '../../../Components/CustomButton';
 import {chat, drawer, heart, send, user} from '../../../Utils/img';
 import {useNavigation} from '@react-navigation/native';
+import LoaderScreen from '../../LoaderScreen';
 
 interface PostData {
   name: string;
@@ -27,25 +28,29 @@ const Home = () => {
   const navigation = useNavigation<any>();
   const [postData, setPostData] = useState<PostData[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(false);
-
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(true);
+  
   useEffect(() => {
     getData();
-  }, [page]);
+  }, []);
 
   const getData = async () => {
-    setLoading(true);
     try {
+      setLoading(true);
+      console.log('Fetching data for page:', page);
       const pageSize = 5;
       const postsRef = firestore().collection('posts');
       const query = postsRef
         .orderBy('timestamp', 'desc')
         .limit(pageSize * page);
-
+      
       const querySnapshot = await query.get();
-
-      setTotalPages(Math.ceil(querySnapshot.size / pageSize));
+      
+      const totalPosts = await postsRef.get().then(snapshot => snapshot.size); // Fetch total count of posts
+      const totalPages = Math.ceil(totalPosts / pageSize);
+      console.log('Total pages:', totalPages);
+      
       const newPostData = querySnapshot.docs.map(doc => {
         const data = doc.data() as PostData;
         return {
@@ -55,26 +60,36 @@ const Home = () => {
           description: data.description,
         };
       });
-
-      setPostData([...postData, ...newPostData]);
+  
+      setPostData(newPostData);
+      
+      setTotalPages(totalPages);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
   };
+  
+  
 
   const getTimeAgo = (timestamp: Moment) => {
     return timestamp.fromNow();
   };
+
   const handleLoadMore = async () => {
     if (page < totalPages && !loading) {
-      setLoading(true); 
-      setPage(page + 1);
+      setLoading(true);
+      setPage((prevPage) => prevPage + 1);
       await getData();
-      setLoading(false);
     }
   };
+
+  const debounceLoadMore = () => {
+    const timer = setTimeout(handleLoadMore, 2000); 
+    return () => clearTimeout(timer);
+  };
+  
 
   return (
     <View style={{flex: 1}}>
@@ -104,6 +119,7 @@ const Home = () => {
 
       {postData.length > 0 ? (
         <FlatList
+          style={{ flex: 1 }}
           showsVerticalScrollIndicator={false}
           data={postData}
           renderItem={({item, index}: any) => {
@@ -157,10 +173,8 @@ const Home = () => {
             );
           }}
           keyExtractor={(item, index) => index.toString()}
-          onEndReached={handleLoadMore}
-          ListFooterComponent={() =>
-            loading && <Text style={{textAlign: 'center'}}>Loading...</Text>
-          }
+          onEndReached={debounceLoadMore}
+          ListFooterComponent={() => loading && <LoaderScreen/>}
           onEndReachedThreshold={0.5}
         />
       ) : (

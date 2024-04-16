@@ -19,26 +19,38 @@ const RootStack = createNativeStackNavigator();
 
 const Navigator = (): JSX.Element => {
   const loginRecord = useSelector((state: RootState) => state.loginReducer);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
 
   useEffect(() => {
     validateUser('userInfo');
   }, []);
 
   const validateUser = async (key: string): Promise<void> => {
-    const user = await Storage.getData(key);
-    if (user) {
-      dispatch({
-        type: 'LOGIN',
-        payload: JSON.parse(user),
-      });
-    } else {
+    try {
+      const userData: string | null = await Storage.getData(key);  
+      if (userData) {
+        const user = JSON.parse(userData); 
+        dispatch({
+          type: 'LOGIN',
+          payload: user,
+        });
+      } else {
+        dispatch({
+          type: 'LOGIN_FAILURE',
+          payload: true,
+        });
+      }
+    } catch (error) {
+      console.error('Error validating user:', error);
       dispatch({
         type: 'LOGIN_FAILURE',
         payload: true,
       });
     }
   };
+  
+  
+  
 
   return (
     <NavigationContainer>
