@@ -95,6 +95,7 @@ const Login: FC<LoginProps> = () => {
       setUserInfo(userData);
 
       await firestore().collection('users').doc(userData.email).set(userData);
+      dispatch(loginAction(userData));
     } catch (error) {
       console.log(error);
     }
@@ -120,9 +121,9 @@ const Login: FC<LoginProps> = () => {
   
       const { name, userID } = currentProfile;
   
-      await firestore().collection('users').doc(userID || '').set({
-        name: name || '',
-        userID: userID || '',
+      await firestore().collection('users').doc(userID || "").set({
+        name: name ,
+        userID: userID ,
       });
   
       setLoading(true);

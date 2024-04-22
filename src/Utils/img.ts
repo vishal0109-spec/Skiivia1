@@ -35,3 +35,4 @@ export const profileBack = require('../Assests/Images/profileBack.jpg');
 export const userProfile = require('../Assests/Images/userProfile.png');
 export const pencil = require('../Assests/Images/pencil.png');
 export const gallery = require('../Assests/Images/gallery.png');
+export const save = require('../Assests/Images/save.png');
