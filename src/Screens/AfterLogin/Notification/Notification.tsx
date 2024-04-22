@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet, Alert, StatusBar} from 'react-native';
+import {View, Text, StyleSheet, Alert} from 'react-native';
 import React, {useState} from 'react';
 import {
   widthPercentageToDP as wp,
