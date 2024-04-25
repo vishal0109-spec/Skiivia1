@@ -49,3 +49,5 @@ export const pop2Txt = "Upload Cover photo";
 export const email2 = 'Email';
 export const phn = 'Phone';
 export const submit = 'Submit';
+export const mySpace = 'My Space';
+export const send = 'Send';

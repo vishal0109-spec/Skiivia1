@@ -16,6 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 import Button from '../../../Components/CustomButton';
 import {chat, drawer, heart, send, user} from '../../../Utils/img';
 import LoaderScreen from '../../LoaderScreen';
+import MessagesScreen from '../ChatScreen/MessagesScreen';
 
 interface PostData {
   name: string;
@@ -96,7 +97,13 @@ const Home = () => {
           iconStyle={Styles.drawerIcon}
           onPress={() => navigation.openDrawer()}
         />
-        <Text style={Styles.homeTxt}>Home</Text>
+         <Text style={Styles.homeTxt}>Home</Text>
+        <Button
+          icon={chat}
+          iconStyle={Styles.chatIcon}
+          onPress={() => navigation.navigate(MessagesScreen)}
+        />
+       
       </View>
 
       {postData.length > 0 ? (
@@ -158,7 +165,6 @@ const Styles = StyleSheet.create({
     alignItems: 'center',
   },
   topBarContainer: {
-    width: wp(100),
     backgroundColor: '#fff',
     flexDirection: 'row',
     paddingTop: hp(1),
@@ -206,6 +212,14 @@ const Styles = StyleSheet.create({
     height: hp(5),
     left: wp(2),
     top: hp(1),
+    resizeMode: 'cover',
+  },
+  chatIcon: {
+    tintColor: 'gray',
+    width: wp(8),
+    height: hp(4),
+    marginLeft:wp(62),
+    top:hp(1),
     resizeMode: 'cover',
   },
   icon: {
