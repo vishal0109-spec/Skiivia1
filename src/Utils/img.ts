@@ -43,3 +43,4 @@ export const video = require('../Assests/Images/video.png');
 export const telephone = require('../Assests/Images/telephone.png');
 export const pin = require('../Assests/Images/pin.png');
 export const rupee = require('../Assests/Images/rupee.png');
+export const emoji = require('../Assests/Images/emoji.png');

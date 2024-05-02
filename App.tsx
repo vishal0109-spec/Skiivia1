@@ -11,7 +11,6 @@ import SplashScreen from 'react-native-splash-screen';
 import { styles } from './src/Screens/BeforeLogin/Login/styles';
 import { store } from './src/Redux/store';
 
-
 //new branch
 const App = () => {
 

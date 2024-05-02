@@ -1,17 +1,26 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Bubble, GiftedChat, Send } from 'react-native-gifted-chat';
+import React, {useState, useEffect, useCallback} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
+import {Bubble, GiftedChat, Send} from 'react-native-gifted-chat';
 import Button from '../../../Components/CustomButton';
-import { Navback, camera, dots, pin, rupee, telephone, userWsp, video } from '../../../Utils/img';
+import {
+  Navback,
+  camera,
+  dots,
+  emoji,
+  pin,
+  rupee,
+  telephone,
+  userWsp,
+  video,
+} from '../../../Utils/img';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { send } from '../../../Utils/constant';
+import {send} from '../../../Utils/constant';
 
-
-const ChatScreen = ({ route }) => {
-  const { userName } = route.params;
+const ChatScreen = ({route}) => {
+  const {userName} = route.params;
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
@@ -40,112 +49,78 @@ const ChatScreen = ({ route }) => {
   }, []);
 
   const onSend = useCallback((messages = []) => {
-    setMessages((previousMessages) =>
+    setMessages(previousMessages =>
       GiftedChat.append(previousMessages, messages),
     );
   }, []);
 
-  const renderSend = (props) => {
+  const renderCustomFooter = (props) => {
     return (
-      <Send {...props}>
-        <View style={{flexDirection:'row'}}>
-        <Button
-        icon={pin}
-        iconStyle={styles.pinIcon}
-        />
-        <Button
-        icon={rupee}
-        iconStyle={styles.rupeeIcon}
-        />
-        <Button
-        icon={camera}
-        iconStyle={styles.pinIcon}
-        />
-        <Button
-        title={send}
-        btnStyle={styles.sendTxt}
-        style={styles.sendbtn}
-        />
+        <View style={styles.footer}>
+          
+          <View style={styles.inputContainer}>
+          <TextInput
+          {...props}
+          placeholder='Message'
+          style={styles.txtInput}
+          />
+          </View>
+          <Button icon={emoji} iconStyle={styles.emojiIcon} />
+          <Button icon={pin} iconStyle={styles.pinIcon} />
+          <Button icon={rupee} iconStyle={styles.rupeeIcon} />
+          <Button icon={camera} iconStyle={styles.cameraIcon} />
+          <Button
+            title={send}
+            btnStyle={styles.sendTxt}
+            style={styles.sendbtn}
+          />
         </View>
         
-      </Send>
     );
   };
 
-  // const formatTime = (createdAt) => {
-  //   const options = { hour: 'numeric', minute: 'numeric' };
-  //   return new Intl.DateTimeFormat('en-US', options).format(createdAt);
-  // };
+  const formatTime = (createdAt) => {
+    const hours = createdAt.getHours().toString().padStart(2, '0');
+    const minutes = createdAt.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
   
   const renderBubble = (props) => {
-    // const time = formatTime(props.currentMessage.createdAt);
-  
+    const { currentMessage } = props;
+    const messageAndTime = `${currentMessage.text} ${formatTime(currentMessage.createdAt)}`;
+  const bubbleWidth = messageAndTime.length * 8;
+
     return (
-      <Bubble
-        {...props}
-        wrapperStyle={{
-          left: {
-            marginLeft: wp(-12),
-            backgroundColor: '#d9d9d9',
-          },
-          right: {
-            backgroundColor: '#2e64e5',
-          },
-        }}
-        textStyle={{
-          left: {
-            color: '#333',
-          },
-          right: {
-            color: '#fff',
-          },
-        }}
-      >
-        {/* <View style={styles.bubbleContent}>
-          <Text style={styles.messageText}>{props.currentMessage.text}</Text>
-          {time && <Text style={styles.timeText}>{time}</Text>}
-        </View> */}
-      </Bubble>
+      <View style={[styles.bubble,{ maxWidth: Math.min(bubbleWidth, wp(70)) }, currentMessage.user._id === 1 ? styles.rightBubble : styles.leftBubble]}>
+        <Text style={styles.messageText}>{currentMessage.text}</Text>
+        <Text style={styles.timeText}>{formatTime(currentMessage.createdAt)}</Text>
+      </View>
     );
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Button
-        icon={Navback}
-        iconStyle={styles.backIcon}
-        />
-        <Button
-        icon={userWsp}
-        iconStyle={styles.userIcon}
-        />
-        <Text style={styles.headerText}>{ userName }</Text>
+        <Button icon={Navback} iconStyle={styles.backIcon} />
+        <Button icon={userWsp} iconStyle={styles.userIcon} />
+        <Text style={styles.headerText}>{userName}</Text>
         <View style={styles.headerIcons}>
-        <Button
-        icon={video}
-        iconStyle={styles.videoIcon}
-        />
-        <Button
-        icon={telephone}
-        iconStyle={styles.videoIcon}
-        />
-        <Button
-        icon={dots}
-        iconStyle={styles.videoIcon}
-        />
+          <Button icon={video} iconStyle={styles.videoIcon} />
+          <Button icon={telephone} iconStyle={styles.videoIcon} />
+          <Button icon={dots} iconStyle={styles.videoIcon} />
         </View>
       </View>
       <GiftedChat
         messages={messages}
-        onSend={(messages) => onSend(messages)}
+        onSend={messages => onSend(messages)}
         user={{
           _id: 1,
         }}
         renderBubble={renderBubble}
-        alwaysShowSend
-        renderSend={renderSend}
+        // alwaysShowSend
+        renderInputToolbar={renderCustomFooter}
       />
+      
     </View>
   );
 };
@@ -155,37 +130,52 @@ export default ChatScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position:'relative',
   },
-  // bubbleContent: {
-  //   flexDirection: 'row',
-  //   padding: 10,
-  // },
-  // messageText: {
-  //   fontSize: 16,
-  //   flex: 1,
-  // },
-  // timeText: {
-  //   fontSize: 12,
-  //   marginLeft: 5,
-  //   color: '#aaa',
-  // },
-  backIcon:{
-    width:wp(5),
-    height:hp(2),
-    tintColor:'#000',   
+  bubble: {
+    maxWidth: wp(45),
+    paddingHorizontal: wp(4),
+    paddingVertical: hp(1),
+    borderRadius: wp(5),
+    flexDirection: 'row', 
+    alignItems: 'flex-end',  
   },
-  userIcon:{
+  messageText: {
+    fontSize: hp(2),
+    flex: 1,
+  },
+  timeText: {
+    fontSize: hp(1.5),
+    color: '#999',
+    marginTop: hp(0.5),
+    marginLeft: wp(2),
+  },
+  leftBubble: {
+    backgroundColor: '#fff',
+    alignSelf: 'flex-start',
+    marginLeft:wp(-12)
+  },
+  rightBubble: {
+    backgroundColor: '#DCF8C6',
+    alignSelf: 'flex-end',
+  },
+  backIcon: {
+    width: wp(5),
+    height: hp(2),
+    tintColor: '#000',
+  },
+  userIcon: {
     width: wp(8),
     height: hp(4),
     backgroundColor: '#cccccc',
     tintColor: '#fff',
     borderRadius: wp(5),
-    marginLeft:wp(3)
+    marginLeft: wp(3),
   },
-  videoIcon:{
+  videoIcon: {
     width: wp(8),
     height: hp(4),
-    marginLeft:wp(3.5)
+    marginLeft: wp(3.5),
   },
   header: {
     flexDirection: 'row',
@@ -196,42 +186,75 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: hp(2.6),
     fontWeight: '400',
-    marginLeft:wp(3)
+    marginLeft: wp(3),
   },
   headerIcons: {
     flexDirection: 'row',
-    marginLeft:wp(25)
-  },
-  footer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingBottom: 10,
-    backgroundColor: '#f0f0f0',
-  },
-  footerIcon: {
-    marginHorizontal: 5,
+    marginLeft: wp(25),
   },
   sendbtn: {
-    marginRight: wp(3),
-    marginBottom: hp(1.5),
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor: '#F9F9F9',
+    borderRadius: wp(5),
+    borderColor: '#E8E8E8',
+    borderWidth: 1,
+    height: hp(5),
+    borderStyle: 'solid',
+    width:wp(15)
   },
   sendTxt: {
-    fontSize: hp(2.2),
+    fontSize: hp(2),
     fontWeight: '700',
-    color:'gray'
+    color: 'gray',
   },
-  pinIcon:{
-    width:wp(6),
-    height:hp(3),
-    marginRight:wp(3)
+  pinIcon: {
+    width: wp(5),
+    height: hp(2.5),
+    marginRight:wp(3),
+    resizeMode:'cover',
   },
-  rupeeIcon:{
-    width:wp(5),
-    height:hp(2.5),
-    marginTop:hp(0.2),
-    backgroundColor:'#a6a6a6',
-    borderRadius:wp(3),
-    marginRight:wp(3)
-  }
+  cameraIcon:{
+    width: wp(5),
+    height: hp(2.5),
+    marginRight:wp(3),
+    resizeMode:'cover',
+  },
+  inputContainer: {
+    flex: 1,
+  },
+  emojiIcon:{
+    width: wp(5),
+    height: hp(2.5),
+    tintColor:'gray',
+    resizeMode:'cover',
+    marginRight:wp(53),
+    marginBottom:hp(0.6)
+  },
+  footer:{
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  txtInput:{
+    width: wp(85),
+    backgroundColor: '#F9F9F9',
+    borderRadius: wp(5),
+    borderColor: '#E8E8E8',
+    borderWidth: 1,
+    height: hp(5),
+    borderStyle: 'solid',
+    paddingLeft: wp(9),
+    paddingTop:hp(1),
+    alignItems:'center',
+    justifyContent:'center'
+  },
+  rupeeIcon: {
+    width: wp(5),
+    height: hp(2.5),
+    marginTop: hp(0.2),
+    backgroundColor: '#a6a6a6',
+    borderRadius: wp(3),
+    marginRight: wp(3),
+    resizeMode:'cover',
+  },
 });
